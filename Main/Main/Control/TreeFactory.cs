@@ -13,18 +13,13 @@ namespace Main.Control
     class TreeFactory
     {
 
-        public Tree CreateTree(string ident, int depth, string trainingsFilePath)
+        public Composite CreateTree(string ident, int depth, string trainingsFilePath)
         {
-            var tree = new Tree(ident, depth, ' ');
-
-            var fileContent = File.ReadAllText(trainingsFilePath);
-            foreach (var letter in fileContent)
-            {
-
-            }
-            //ToDo add magic
+            var tree = Parse(ident, depth, trainingsFilePath);
             return tree;
         }
+
+        
 
         public Tree RestoreTree(string path)
         {
@@ -56,6 +51,56 @@ namespace Main.Control
                 document.Load(stream);
                 document.Save(path);
                 stream.Close();
+            }
+        }
+
+        private Composite Parse(string ident, int depth, string trainingsFilePath)
+        {
+            char letter;
+            Composite root = new Tree(ident, depth, ' ');
+            Composite parent = root;
+            Composite me;
+            int level = 0;
+            //read text
+            var fs = new FileStream(trainingsFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using (var reader = new StreamReader(fs))
+            {
+                while (!reader.EndOfStream)
+                {
+                    letter = (char)reader.Read();
+                    //check if char is valide
+                    if (Keyboard.IsValideLetter(letter))
+                    {
+                        //check if char allready exist on level
+                        me = parent.Elements.Value.Find(e => e.Ident == letter);
+                        if (me == null)
+                        {
+                            //create new node
+                            me = new Element(letter, parent);
+                        }
+                        //Increse Path
+                        IncreseWeightRecursiv(me);
+                        //traverse to levels of tree
+                        if (((++level) % depth) != 0)
+                        {
+                            parent = me;
+                        }
+                        else
+                        {
+                            parent = root;
+                        }
+                    }
+                }
+            }
+            return parent;
+        }
+
+        private void IncreseWeightRecursiv(Composite composite)
+        {
+            composite.IncreaseWeightByOne();
+            if (!composite.IsRoot)
+            {
+                IncreseWeightRecursiv(composite.Parent);
             }
         }
     }

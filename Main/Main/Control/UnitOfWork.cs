@@ -11,6 +11,8 @@ namespace Main.Control
 
         private const string _welcomeString = "Hello,\r\n 1)test";
 
+        private enum _states { Init, Restorring, };
+        private _states _state;
         private bool _isParameterPathToLernFileSet;
         private bool _isParameterPathToTreeFileSet;
         private bool _isParameterDepthSet;
@@ -22,7 +24,7 @@ namespace Main.Control
 
         private UnitOfWork()
         {
-
+            //_state = _states.
         }
 
         private void parseArgs(string[] args)
