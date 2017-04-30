@@ -8,12 +8,27 @@ namespace Main.Model
 {
     class Element : Composite
     {
+        bool Composite.IsRoot
+        {
+            get
+            {
+                return false;
+            }
+        }
         private Lazy<List<Composite>> _elements;
         Lazy<List<Composite>> Composite.Elements
         {
             get
             {
                 return _elements;
+            }
+        }
+        private Composite _parent;
+        Composite Composite.Parent
+        {
+            get
+            {
+                return _parent;
             }
         }
         private char _ident;
@@ -33,8 +48,9 @@ namespace Main.Model
             }
         }
 
-        public Element(char ident)
+        public Element(char ident, Composite parent)
         {
+            _parent = parent;
             _ident = ident;
             _weight = 0;
         }

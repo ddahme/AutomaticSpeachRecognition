@@ -10,6 +10,22 @@ namespace Main.Model
     {
         private TreeInfo _info;
 
+        Composite Composite.Parent
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        bool Composite.IsRoot
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         private int _weight;
         int Composite.Weight
         {
@@ -40,6 +56,7 @@ namespace Main.Model
             _info = new TreeInfo(treeIdent, depth);
             _ident = ident;
             _weight = 0;
+            
         }
 
         void Composite.Add(Composite element)
