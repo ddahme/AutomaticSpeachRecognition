@@ -1,4 +1,5 @@
-﻿using Main.Model;
+﻿using Main.Control.AddStrategy;
+using Main.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,56 +11,49 @@ using System.Xml.Serialization;
 
 namespace Main.Control
 {
-    class TreeFactory
+    public class TreeFactory
     {
+        private AddStrategyInterface _addStrategy;
 
-        public Composite CreateTree(string ident, int depth, string trainingsFilePath)
+        private Tree _tree;
+        public Tree Tree
         {
-            var tree = Parse(ident, depth, trainingsFilePath);
-            return tree;
+            get
+            {
+                return _tree;
+            }
         }
 
-        
-
-        public Tree RestoreTree(string path)
+        private int _depth;
+        public int Depth
         {
-            Tree tree;
-            var document = new XmlDocument();
-            document.Load(path);
-            var content = document.OuterXml;
-            using (var reader = new StringReader(content))
+            get
             {
-                var serializer = new XmlSerializer(typeof(Tree));
-                using (var innerReader = new XmlTextReader(reader))
+                return Depth;
+            }
+            set
+            {
+                //check if tree is under construction
+                if (_tree == null)
                 {
-                    tree = (Tree)serializer.Deserialize(innerReader);
-                    innerReader.Close();
+                    _depth = value;
                 }
-                reader.Close();
             }
-            return tree;
         }
 
-        public void SaveTree(Tree tree, string path)
+        public TreeFactory(AddStrategyInterface addStrategy)
         {
-            var document = new XmlDocument();
-            var serializer = new XmlSerializer(tree.GetType());
-            using (var stream = new MemoryStream())
-            {
-                serializer.Serialize(stream, tree);
-                stream.Position = 0;
-                document.Load(stream);
-                document.Save(path);
-                stream.Close();
-            }
+            _addStrategy = addStrategy;
         }
 
-        private Composite Parse(string ident, int depth, string trainingsFilePath)
+
+
+        public CompositeInterface CreateTreeOutOfTextFile(string trainingsFilePath)
         {
             char letter;
-            Composite root = new Tree(ident, depth, ' ');
-            Composite parent = root;
-            Composite me;
+            CompositeInterface root = new Tree(_depth);
+            CompositeInterface parent = root;
+            List<CompositeInterface> addedElements;
             int level = 0;
             //read text
             var fs = new FileStream(trainingsFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -71,37 +65,20 @@ namespace Main.Control
                     //check if char is valide
                     if (Keyboard.IsValideLetter(letter))
                     {
-                        //check if char allready exist on level
-                        me = parent.Elements.Value.Find(e => e.Ident == letter);
-                        if (me == null)
+                        _addStrategy.Add(parent, letter);
+                        addedElements = _addStrategy.AddedElements;
+                        
+                        if (_depth > 0)
                         {
-                            //create new node
-                            me = new Element(letter, parent);
-                        }
-                        //Increse Path
-                        IncreseWeightRecursiv(me);
-                        //traverse to levels of tree
-                        if (((++level) % depth) != 0)
-                        {
-                            parent = me;
-                        }
-                        else
-                        {
-                            parent = root;
+                            if (((++level) % _depth) == 0)
+                            {
+                                parent = root;
+                            }
                         }
                     }
                 }
             }
             return parent;
-        }
-
-        private void IncreseWeightRecursiv(Composite composite)
-        {
-            composite.IncreaseWeightByOne();
-            if (!composite.IsRoot)
-            {
-                IncreseWeightRecursiv(composite.Parent);
-            }
         }
     }
 }

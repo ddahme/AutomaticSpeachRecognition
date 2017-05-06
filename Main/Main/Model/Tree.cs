@@ -6,11 +6,22 @@ using System.Threading.Tasks;
 
 namespace Main.Model
 {
-    class Tree : Composite
+    public class Tree : CompositeInterface
     {
-        private TreeInfo _info;
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
 
-        Composite Composite.Parent
+        public CompositeInterface Parent
         {
             get
             {
@@ -18,7 +29,7 @@ namespace Main.Model
             }
         }
 
-        bool Composite.IsRoot
+        public bool IsRoot
         {
             get
             {
@@ -26,8 +37,17 @@ namespace Main.Model
             }
         }
 
+        private int _depth;
+        public int Depth
+        {
+            get
+            {
+                return _depth;
+            }
+        }
+
         private int _weight;
-        int Composite.Weight
+        public int Weight
         {
             get
             {
@@ -35,15 +55,15 @@ namespace Main.Model
             }
         }
         private char _ident;
-        char Composite.Ident
+        public char Ident
         {
             get
             {
-                return _ident;
+                return ' ';
             }
         }
-        private Lazy<List<Composite>> _elements;
-        Lazy<List<Composite>> Composite.Elements
+        private Lazy<List<CompositeInterface>> _elements;
+        public Lazy<List<CompositeInterface>> Elements
         {
             get
             {
@@ -51,15 +71,14 @@ namespace Main.Model
             }
         }
 
-        public Tree(string treeIdent, int depth, char ident)
+        public Tree(int depth)
         {
-            _info = new TreeInfo(treeIdent, depth);
-            _ident = ident;
+            _depth = depth;
             _weight = 0;
             
         }
 
-        void Composite.Add(Composite element)
+        public void Add(CompositeInterface element)
         {
             _elements.Value.Add(element);
         }

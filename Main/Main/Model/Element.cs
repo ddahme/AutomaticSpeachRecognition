@@ -6,41 +6,42 @@ using System.Threading.Tasks;
 
 namespace Main.Model
 {
-    class Element : Composite
+    public class Element : CompositeInterface
     {
-        bool Composite.IsRoot
-        {
-            get
-            {
-                return false;
-            }
-        }
-        private Lazy<List<Composite>> _elements;
-        Lazy<List<Composite>> Composite.Elements
+        private Lazy<List<CompositeInterface>> _elements;
+        public Lazy<List<CompositeInterface>> Elements
         {
             get
             {
                 return _elements;
             }
         }
-        private Composite _parent;
-        Composite Composite.Parent
-        {
-            get
-            {
-                return _parent;
-            }
-        }
         private char _ident;
-        char Composite.Ident
+        public char Ident
         {
             get
             {
                 return _ident;
             }
         }
+
+        public bool IsRoot
+        {
+            get
+            {
+                return false;
+            }
+        }
+        private CompositeInterface _parent;
+        public CompositeInterface Parent
+        {
+            get
+            {
+                return _parent;
+            }
+        }
         private int _weight;
-        int Composite.Weight
+        public int Weight
         {
             get
             {
@@ -48,14 +49,14 @@ namespace Main.Model
             }
         }
 
-        public Element(char ident, Composite parent)
+        public Element(char ident, CompositeInterface parent)
         {
             _parent = parent;
             _ident = ident;
             _weight = 0;
         }
 
-        void Composite.Add(Composite element)
+        public void Add(CompositeInterface element)
         {
             _elements.Value.Add(element);
         }

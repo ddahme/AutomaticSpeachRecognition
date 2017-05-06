@@ -43,15 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\AddStrategy\AddStrategyInterface.cs" />
+    <Compile Include="Control\AddStrategy\SimpleLernAddStrategy.cs" />
+    <Compile Include="Control\AddStrategy\SimpleParseAddStrategy.cs" />
     <Compile Include="Control\Keyboard.cs" />
+    <Compile Include="Control\TreeController.cs" />
     <Compile Include="Control\TreeFactory.cs" />
     <Compile Include="Control\UnitOfWork.cs" />
-    <Compile Include="Model\Composite.cs" />
+    <Compile Include="Model\CompositeInterface.cs" />
     <Compile Include="Model\Element.cs" />
     <Compile Include="Model\Key.cs" />
     <Compile Include="Model\Keys.cs" />
     <Compile Include="Model\Tree.cs" />
-    <Compile Include="Model\TreeInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

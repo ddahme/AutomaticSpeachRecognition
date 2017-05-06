@@ -9,8 +9,6 @@ namespace Main.Control
 {
     class Keyboard
     {
-        
-
 
         public static bool IsValideLetter(char l)
         {
@@ -39,7 +37,11 @@ namespace Main.Control
 
         public static Key GetKeyToLetter(char letter)
         {
-            return Keys.All.FirstOrDefault(k => k.Letters.Contains(letter));
+            var key = Keys.All.First(k => k.Letters.Contains(letter));
+            if(key == null){
+                key = Keys.Six;
+            }
+            return key;
         }
     }
 }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Main.Model
 {
-    interface Composite
+    public interface CompositeInterface
     {
         bool IsRoot { get; }
         int Weight { get; }
         char Ident { get; }
-        Lazy<List<Composite>> Elements { get; }
-        Composite Parent { get; }
-        void Add(Composite element);
+        Lazy<List<CompositeInterface>> Elements { get; }
+        CompositeInterface Parent { get; }
+        void Add(CompositeInterface element);
         void IncreaseWeightByOne();
     }
 }
