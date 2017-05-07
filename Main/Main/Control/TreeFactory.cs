@@ -13,7 +13,10 @@ namespace Main.Control
 {
     public class TreeFactory
     {
+        private List<CompositeInterface> _addedElementsInLastCall;
+        private List<CompositeInterface> _rootList;
         private AddStrategyInterface _addStrategy;
+        private int _level;
 
         private Tree _tree;
         public Tree Tree
@@ -29,31 +32,24 @@ namespace Main.Control
         {
             get
             {
-                return Depth;
-            }
-            set
-            {
-                //check if tree is under construction
-                if (_tree == null)
-                {
-                    _depth = value;
-                }
+                return _depth;
             }
         }
 
-        public TreeFactory(AddStrategyInterface addStrategy)
+        public TreeFactory(AddStrategyInterface addStrategy, int? depth = null)
         {
             _addStrategy = addStrategy;
+            _depth = depth.GetValueOrDefault();
+            _tree = new Tree(_depth);
+            _rootList = new List<CompositeInterface>();
+            _rootList.Add(_tree);
+            _addedElementsInLastCall = _rootList;
+            _level = 0;
         }
 
         public Tree CreateTreeOutOfTextFile(string trainingsFilePath)
         {
             char letter;
-            CompositeInterface root = new Tree(_depth);
-            List<CompositeInterface> addedElements = new List<CompositeInterface>();
-            List<CompositeInterface> addedElementsOfParents = new List<CompositeInterface>();
-            addedElementsOfParents.Add(root);
-            int level = 0;
 
             //read text
             var fs = new FileStream(trainingsFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -61,34 +57,41 @@ namespace Main.Control
             {
                 while (!reader.EndOfStream)
                 {
-                    //clear list of added elements
-                    addedElements.Clear();
                     //read letter form text
                     letter = (char)reader.Read();
-                    //for each added element in the last iteration
-                    foreach (var parent in addedElementsOfParents)
-                    {
-                        //call the add-strategy
-                        _addStrategy.Add(parent, letter);
-                        //add add the result to the list of added elementrs for the next level
-                        addedElements.AddRange(_addStrategy.AddedElements);
-                    }
-                    //if the trees depth is restricted by _depth, check if this level is to deep
-                    if (_depth > 0 && ((++level) % _depth) == 0)
-                    {
-                        //if it is use the root as last level
-                        addedElementsOfParents.Clear();
-                        addedElementsOfParents.Add(root);
-                    }
-                    else
-                    {
-                        //if it is not just use the added elements of this iteratrion for the next one and go ahead
-                        addedElementsOfParents = addedElements;
-                    }
+                    //Add it to tree
+                    Add(letter);
                 }
             }
-            _tree = (Tree)root;
             return _tree;
+        }
+
+        public void Add(char ident)
+        {
+            var addedElementsInCurrentCall = new List<CompositeInterface>();
+
+            //for each added element in the last iteration
+            foreach (var parent in _addedElementsInLastCall)
+            {
+                //call the add-strategy
+                _addStrategy.Add(parent, ident);
+                //add add the result to the list of added elementrs for the next level
+                addedElementsInCurrentCall.AddRange(_addStrategy.AddedElements);
+            }
+
+            //increment level
+            _level++;
+            //if the trees depth is restricted by _depth, check if this level is to deep
+            if (_depth > 0 && ((_level) % _depth) == 0)
+            {
+                //if it is use the root as last level
+                _addedElementsInLastCall = _rootList;
+            }
+            else
+            {
+                //if it is not just use the added elements of this iteratrion for the next one and go ahead
+                _addedElementsInLastCall = addedElementsInCurrentCall;
+            }
         }
     }
 }

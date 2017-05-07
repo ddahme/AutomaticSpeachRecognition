@@ -22,20 +22,25 @@ namespace Main.Control.AddStrategy
             }
         }
 
-        public SimpleParseAddStrategy()
-        {
-            _addedElements = new List<CompositeInterface>();
-        }
-
         public void Add(CompositeInterface parent, char elementIdent)
         {
+            _addedElements = new List<CompositeInterface>();
             var key = Keyboard.GetKeyByName(elementIdent);
             foreach(var letter in key.Letters)
             {
                 var element = new Element(letter, parent);
                 parent.Add(element);
+                IncreseWeightRecursiv(element);
                 _addedElements.Add(element);
-                parent.IncreaseWeightByOne();
+            }
+        }
+
+        private void IncreseWeightRecursiv(CompositeInterface composite)
+        {
+            composite.IncreaseWeightByOne();
+            if (!composite.IsRoot)
+            {
+                IncreseWeightRecursiv(composite.Parent);
             }
         }
     }

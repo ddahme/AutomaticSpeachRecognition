@@ -9,9 +9,21 @@ namespace Main.Control.AddStrategy
 {
     class SimpleLernAddStrategy : AddStrategyInterface
     {
-        public CompositeInterface Add(CompositeInterface parent, char elementIdent)
+        private List<CompositeInterface> _addedElements;
+        public List<CompositeInterface> AddedElements
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public void Add(CompositeInterface parent, char elementIdent)
         {
             CompositeInterface node;
+
+            //init List of added Elements
+            _addedElements = new List<CompositeInterface>();
             //check if element allready exists
             node = parent.Elements.Value.Find(e => e.Ident == elementIdent);
             if (node == null)
@@ -23,7 +35,7 @@ namespace Main.Control.AddStrategy
             }
             //increase weight of path
             IncreseWeightRecursiv(node);
-            return node;
+            _addedElements.Add(node);
         }
 
         private void IncreseWeightRecursiv(CompositeInterface composite)
