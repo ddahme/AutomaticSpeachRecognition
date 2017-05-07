@@ -61,8 +61,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Content Include="Data\adventures_of_huckleberry_finn.txt.txt" />
+    <Content Include="Data\alices_adventures_in_wonderland.txt.txt" />
+    <Content Include="Data\pride_and_prejudice.txt.txt" />
+    <Content Include="Data\the_adevntures_of_sherlock_holmes.txt.txt" />
+    <Content Include="Data\the_jungle_book.txt.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
