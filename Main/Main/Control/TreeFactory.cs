@@ -46,39 +46,49 @@ namespace Main.Control
             _addStrategy = addStrategy;
         }
 
-
-
-        public CompositeInterface CreateTreeOutOfTextFile(string trainingsFilePath)
+        public Tree CreateTreeOutOfTextFile(string trainingsFilePath)
         {
             char letter;
             CompositeInterface root = new Tree(_depth);
-            CompositeInterface parent = root;
-            List<CompositeInterface> addedElements;
+            List<CompositeInterface> addedElements = new List<CompositeInterface>();
+            List<CompositeInterface> addedElementsOfParents = new List<CompositeInterface>();
+            addedElementsOfParents.Add(root);
             int level = 0;
+
             //read text
             var fs = new FileStream(trainingsFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             using (var reader = new StreamReader(fs))
             {
                 while (!reader.EndOfStream)
                 {
+                    //clear list of added elements
+                    addedElements.Clear();
+                    //read letter form text
                     letter = (char)reader.Read();
-                    //check if char is valide
-                    if (Keyboard.IsValideLetter(letter))
+                    //for each added element in the last iteration
+                    foreach (var parent in addedElementsOfParents)
                     {
+                        //call the add-strategy
                         _addStrategy.Add(parent, letter);
-                        addedElements = _addStrategy.AddedElements;
-                        
-                        if (_depth > 0)
-                        {
-                            if (((++level) % _depth) == 0)
-                            {
-                                parent = root;
-                            }
-                        }
+                        //add add the result to the list of added elementrs for the next level
+                        addedElements.AddRange(_addStrategy.AddedElements);
+                    }
+                    //if the trees depth is restricted by _depth, check if this level is to deep
+                    if (_depth > 0 && ((++level) % _depth) == 0)
+                    {
+                        //if it is use the root as last level
+                        addedElementsOfParents.Clear();
+                        addedElementsOfParents.Add(root);
+                    }
+                    else
+                    {
+                        //if it is not just use the added elements of this iteratrion for the next one and go ahead
+                        addedElementsOfParents = addedElements;
                     }
                 }
             }
-            return parent;
+            _tree = (Tree)root;
+            return _tree;
         }
     }
 }
