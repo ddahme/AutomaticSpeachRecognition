@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Main.Control
 {
-    class Keyboard
+    class KeyController
     {
 
         public static bool IsValideLetter(char l)

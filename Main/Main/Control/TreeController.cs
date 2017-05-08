@@ -12,9 +12,36 @@ namespace Main.Control
 {
     public class TreeController
     {
-        public Tree RestoreTree(string path)
+        //ToDo think about lerntree and strategy and stuff
+        //build lern-Tree with treeFactory
+        //Create AdvancedParseAddStrategy and give it lern-Tree
+        //Create TreeFactory and give it AdvancedParseAddStrategy as parseTree
+        //use parse input with parseTree
+        //-> treeController is useless
+        //maybe use treeController as "wrapper" for Unit Of Work
+        //TreeController handels TreeFactories and stuff
+
+        private Tree _lernTree;
+        private List<string> _lernFilePaths;
+        public List<string> LernFilePaths
         {
-            Tree tree;
+            get
+            {
+                return _lernFilePaths;
+            }
+            set
+            {
+                _lernFilePaths = value;
+            }
+        }
+
+        public void BuildLernTree()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RestoreTree(string path)
+        {
             var document = new XmlDocument();
             document.Load(path);
             var content = document.OuterXml;
@@ -23,21 +50,20 @@ namespace Main.Control
                 var serializer = new XmlSerializer(typeof(Tree));
                 using (var innerReader = new XmlTextReader(reader))
                 {
-                    tree = (Tree)serializer.Deserialize(innerReader);
+                    _lernTree = (Tree)serializer.Deserialize(innerReader);
                     innerReader.Close();
                 }
                 reader.Close();
             }
-            return tree;
         }
 
-        public void SaveTree(Tree tree, string path)
+        public void SaveLernTree(string path)
         {
             var document = new XmlDocument();
-            var serializer = new XmlSerializer(tree.GetType());
+            var serializer = new XmlSerializer(_lernTree.GetType());
             using (var stream = new MemoryStream())
             {
-                serializer.Serialize(stream, tree);
+                serializer.Serialize(stream, _lernTree);
                 stream.Position = 0;
                 document.Load(stream);
                 document.Save(path);
@@ -45,9 +71,16 @@ namespace Main.Control
             }
         }
 
-        public double TestTree()
+        public double TestLernTree()
         {
             throw new NotImplementedException();
+        }
+
+        public string LernTreeToString()
+        {
+            throw new NotImplementedException();
+            var result = string.Empty;
+            return result;
         }
     }
 }

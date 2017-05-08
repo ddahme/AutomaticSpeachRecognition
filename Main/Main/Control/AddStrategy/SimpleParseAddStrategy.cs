@@ -25,7 +25,7 @@ namespace Main.Control.AddStrategy
         public void Add(CompositeInterface parent, char elementIdent)
         {
             _addedElements = new List<CompositeInterface>();
-            var key = Keyboard.GetKeyByName(elementIdent);
+            var key = KeyController.GetKeyByName(elementIdent);
             foreach(var letter in key.Letters)
             {
                 var element = new Element(letter, parent);

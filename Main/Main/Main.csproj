@@ -46,7 +46,7 @@
     <Compile Include="Control\AddStrategy\AddStrategyInterface.cs" />
     <Compile Include="Control\AddStrategy\SimpleLernAddStrategy.cs" />
     <Compile Include="Control\AddStrategy\SimpleParseAddStrategy.cs" />
-    <Compile Include="Control\Keyboard.cs" />
+    <Compile Include="Control\KeyController.cs" />
     <Compile Include="Control\TreeController.cs" />
     <Compile Include="Control\TreeFactory.cs" />
     <Compile Include="Control\UnitOfWork.cs" />
@@ -63,11 +63,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Data\adventures_of_huckleberry_finn.txt.txt" />
-    <Content Include="Data\alices_adventures_in_wonderland.txt.txt" />
-    <Content Include="Data\pride_and_prejudice.txt.txt" />
-    <Content Include="Data\the_adevntures_of_sherlock_holmes.txt.txt" />
-    <Content Include="Data\the_jungle_book.txt.txt" />
+    <Content Include="Data\adventures_of_huckleberry_finn.txt" />
+    <Content Include="Data\alices_adventures_in_wonderland.txt" />
+    <Content Include="Data\pride_and_prejudice.txt" />
+    <Content Include="Data\the_adevntures_of_sherlock_holmes.txt" />
+    <Content Include="Data\the_jungle_book.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
