@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Main.Control
 {
-    class KeyController
+    public class KeyController
     {
 
-        public static bool IsValideLetter(char l)
+        public bool IsValideLetter(char l)
         {
             foreach (var key in Keys.All)
             {
@@ -25,17 +25,17 @@ namespace Main.Control
             return false;
         }
 
-        public static bool IsValideKey(char k)
+        public bool IsValideKey(char k)
         {
             return (GetKeyByName(k) != default(Key));
         }
 
-        public static Key GetKeyByName(char name)
+        public Key GetKeyByName(char name)
         {
             return Keys.All.FirstOrDefault(k => k.Name == name);
         }
 
-        public static Key GetKeyToLetter(char letter)
+        public Key GetKeyToLetter(char letter)
         {
             var key = Keys.All.First(k => k.Letters.Contains(letter));
             if(key == null){

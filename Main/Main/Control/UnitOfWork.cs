@@ -14,8 +14,6 @@ namespace Main.Control
         private List<_states> _lastStates;
         private KeyController _keyController;
         private TreeController _treeController;
-        private TreeFactory _lernTreeFactory;
-        private Tree _lernTree;
 
 
         public static void DoWork(string[] args)
@@ -24,11 +22,6 @@ namespace Main.Control
         }
 
         private UnitOfWork()
-        {
-            Init();
-        }
-
-        private void Init()
         {
             _lastStates = new List<_states>();
             _lastStates.Add(_states.Init);
@@ -72,10 +65,10 @@ namespace Main.Control
                         PrintTree();
                         break;
                     case "K":
-                        ReadKeyFormKeyboard();
+                        ParseKeyFormKeyboard();
                         break;
                     case "F":
-                        ReadKeyFromFile();
+                        ParseKeyFromFile();
                         break;
                     case "C":
                         ConvertLetterToKey();
@@ -85,12 +78,6 @@ namespace Main.Control
                         break;
                 }
             }
-        }
-
-        private void AddKeyToParseTree()
-        {
-            _lastStates.Add(_states.AddKeyToParseTree);
-
         }
 
         private void LoadLernTree()
@@ -193,22 +180,67 @@ namespace Main.Control
 
         private void PrintTree()
         {
-
+            try
+            {
+                Console.Write(_treeController.LernTreeToString());
+            }
+            catch(Exception exception)
+            {
+                Error(exception);
+            }
         }
 
-        private void ReadKeyFormKeyboard()
+        private void ParseKeyFormKeyboard()
         {
+            ConsoleKey input;
+            bool isRunning = true;
             _lastStates.Add(_states.ReadKeyFromKeyboard);
+            Console.WriteLine("Please enter key you want to parse. Or press Esc to exit.");
+            while (isRunning)
+            {
+                input = Console.ReadKey().Key;
+                isRunning = (input != ConsoleKey.Escape);
+                _treeController.ParseKey((char)input);
+            }
         }
 
-        private void ReadKeyFromFile()
+        private void ParseKeyFromFile()
         {
+            char ident;
             _lastStates.Add(_states.ReadKeyFromFile);
+            Console.WriteLine("Please enter path to file.");
+            var input = Console.ReadLine();
+            try
+            {
+                var fs = new FileStream(input, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using (var reader = new StreamReader(fs))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        //read key form text
+                        ident = (char)reader.Read();
+                        _treeController.ParseKey(ident);
+                    }
+                }
+            }
+            catch(Exception exception)
+            {
+                Error(exception);
+            }
         }
 
         private void ConvertLetterToKey()
         {
-            
+            var result = new StringBuilder();
+            var input = string.Empty;
+            _lastStates.Add(_states.ConvertLetterToKey);
+            Console.WriteLine("Please enter letter to convert to key.");
+            input = Console.ReadLine();
+            foreach(var letter in input)
+            {
+                result.Append(_keyController.GetKeyToLetter(letter).Name);
+            }
+            Console.WriteLine("the result to your inpot is:{result}", result);
         }
 
         private void Error(Exception exception)

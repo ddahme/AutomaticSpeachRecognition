@@ -13,6 +13,7 @@ namespace Main.Control.AddStrategy
     /// </summary>
     public class SimpleParseAddStrategy : AddStrategyInterface
     {
+        private KeyController _keyController;
         private List<CompositeInterface> _addedElements;
         public List<CompositeInterface> AddedElements
         {
@@ -22,10 +23,15 @@ namespace Main.Control.AddStrategy
             }
         }
 
+        public SimpleParseAddStrategy()
+        {
+            _keyController = new KeyController();
+        }
+
         public void Add(CompositeInterface parent, char elementIdent)
         {
             _addedElements = new List<CompositeInterface>();
-            var key = KeyController.GetKeyByName(elementIdent);
+            var key = _keyController.GetKeyByName(elementIdent);
             foreach(var letter in key.Letters)
             {
                 var element = new Element(letter, parent);

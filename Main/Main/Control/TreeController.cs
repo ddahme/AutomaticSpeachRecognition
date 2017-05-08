@@ -76,6 +76,11 @@ namespace Main.Control
             throw new NotImplementedException();
         }
 
+        public void ParseKey(char ident)
+        {
+
+        }
+
         public string LernTreeToString()
         {
             throw new NotImplementedException();

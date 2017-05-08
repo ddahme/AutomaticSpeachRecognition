@@ -1,6 +1,6 @@
 ﻿namespace Main.Model
 {
-    class Key
+    public class Key
     {
         private char[] _letters;
         public char[] Letters
