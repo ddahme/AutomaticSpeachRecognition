@@ -36,7 +36,7 @@ namespace Main.Control
       Console.WriteLine("[B]uild lern-tree");
       Console.WriteLine("[S]ave lern-tree");
       Console.WriteLine("[T]est lern-tree");
-      Console.WriteLine("[P]rint tree");
+      Console.WriteLine("[P]rint");
       Console.WriteLine("parse keys for [K]eyboard");
       Console.WriteLine("parse keys from [F]ile");
       Console.WriteLine("[C]onvert letter to key and parse it");
@@ -181,7 +181,7 @@ namespace Main.Control
     private void PrintTree()
     {
       var input = string.Empty;
-      Console.WriteLine("Do you want to print the [L]ern-tree or the [P]arse-tree?");
+      Console.WriteLine("Do you want to print the [L]ern-tre, the [P]arse-tree or all possible [R]esults?");
       input = Console.ReadLine().ToUpper();
       try
       {
@@ -192,6 +192,12 @@ namespace Main.Control
             break;
           case "P":
             Console.Write(_treeController.ParseTreeToString());
+            break;
+          case "R":
+            foreach(var result in _treeController.PossibleResults())
+            {
+              Console.WriteLine(result);
+            }
             break;
           default:
             Console.WriteLine("Invalid input");

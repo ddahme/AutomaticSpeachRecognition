@@ -158,6 +158,24 @@ namespace Main.Control
       return result;
     }
 
+    public List<string> PossibleResults()
+    {
+      var result = new List<string>();
+      foreach(var leaf in _parseTreeFactory.AddedElements)
+      {
+        var path = new List<char>();
+        var element = leaf;
+        while (!element.IsRoot)
+        {
+          path.Add(element.Ident);
+          element = element.Parent;
+        }
+        path.Reverse();
+        result.Add(new String(path.ToArray()));
+      }
+      return result;
+    }
+
     private string TreeToString(Tree tree)
     {
       var hasNextLevel = true;
