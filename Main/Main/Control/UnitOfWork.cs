@@ -9,7 +9,6 @@ namespace Main.Control
   {
     private enum _states { Init, ReadNextStateFromKeyboard, ReadKeyFromKeyboard, ReadKeyFromFile, ConvertLetterToKey, AddKeyToParseTree, ChangeParseTree, LoadLernTree, BuildLernTree, SaveLernTree, TestLernTree, PrintTree, Error };
     private List<_states> _lastStates;
-    private KeyController _keyController;
     private TreeController _treeController;
 
 
@@ -22,8 +21,8 @@ namespace Main.Control
     {
       _lastStates = new List<_states>();
       _lastStates.Add(_states.Init);
-      _keyController = new KeyController();
       _treeController = new TreeController();
+      ReadNextStateFromKeyboard();
     }
 
     private void ReadNextStateFromKeyboard()
@@ -38,8 +37,8 @@ namespace Main.Control
       Console.WriteLine("[S]ave lern-tree");
       Console.WriteLine("[T]est lern-tree");
       Console.WriteLine("[P]rint tree");
-      Console.WriteLine("parse key for [K]eyboard");
-      Console.WriteLine("parse key from [F]ile");
+      Console.WriteLine("parse keys for [K]eyboard");
+      Console.WriteLine("parse keys from [F]ile");
       Console.WriteLine("[C]onvert letter to key and parse it");
       while (!isValidInput)
       {
@@ -181,9 +180,23 @@ namespace Main.Control
 
     private void PrintTree()
     {
+      var input = string.Empty;
+      Console.WriteLine("Do you want to print the [L]ern-tree or the [P]arse-tree?");
+      input = Console.ReadLine().ToUpper();
       try
       {
-        Console.Write(_treeController.LernTreeToString());
+        switch (input)
+        {
+          case "L":
+            Console.Write(_treeController.LernTreeToString());
+            break;
+          case "P":
+            Console.Write(_treeController.ParseTreeToString());
+            break;
+          default:
+            Console.WriteLine("Invalid input");
+            break;
+        }
       }
       catch (Exception exception)
       {
@@ -202,7 +215,11 @@ namespace Main.Control
       {
         input = Console.ReadKey().Key;
         isRunning = (input != ConsoleKey.Escape);
-        _treeController.ParseKey((char)input);
+        var inputAsChar = (char)input;
+        if (KeyController.IsValideKey(inputAsChar))
+        {
+          _treeController.ParseKey(inputAsChar);
+        }
       }
       ReadNextStateFromKeyboard();
     }
@@ -242,21 +259,21 @@ namespace Main.Control
       input = Console.ReadLine();
       foreach (var letter in input)
       {
-        result.Append(_keyController.GetKeyToLetter(letter).Name);
+        result.Append(KeyController.GetKeyToLetter(letter).Name);
       }
-      Console.WriteLine("the result to your inpot is:{result}", result);
+      Console.WriteLine("the result to your inpot is: {0}", result);
       ReadNextStateFromKeyboard();
     }
 
     private void Error(Exception exception)
     {
       _lastStates.Add(_states.Error);
-      Console.WriteLine("An {errorName} apperes.", exception.GetType());
-      Console.WriteLine("{errorDiscription}", exception.Message);
+      Console.WriteLine("An {0} apperes.", exception.GetType().ToString());
+      Console.WriteLine("{0}", exception.Message);
       Console.WriteLine("List of last states:");
       foreach (var state in _lastStates)
       {
-        Console.WriteLine("-{state}", state.ToString());
+        Console.WriteLine("-{0}", state.ToString());
       }
       ReadNextStateFromKeyboard();
     }

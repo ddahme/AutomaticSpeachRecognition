@@ -63,11 +63,21 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Data\adventures_of_huckleberry_finn.txt" />
-    <Content Include="Data\alices_adventures_in_wonderland.txt" />
-    <Content Include="Data\pride_and_prejudice.txt" />
-    <Content Include="Data\the_adevntures_of_sherlock_holmes.txt" />
-    <Content Include="Data\the_jungle_book.txt" />
+    <Content Include="Data\adventures_of_huckleberry_finn.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\alices_adventures_in_wonderland.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\pride_and_prejudice.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\the_adevntures_of_sherlock_holmes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\the_jungle_book.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,7 +10,7 @@ namespace Main.Control
     public class KeyController
     {
 
-        public bool IsValideLetter(char l)
+        public static bool IsValideLetter(char l)
         {
             foreach (var key in Keys.All)
             {
@@ -25,17 +25,17 @@ namespace Main.Control
             return false;
         }
 
-        public bool IsValideKey(char k)
+        public static bool IsValideKey(char k)
         {
             return (GetKeyByName(k) != default(Key));
         }
 
-        public Key GetKeyByName(char name)
+        public static Key GetKeyByName(char name)
         {
             return Keys.All.FirstOrDefault(k => k.Name == name);
         }
 
-        public Key GetKeyToLetter(char letter)
+        public static Key GetKeyToLetter(char letter)
         {
             var key = Keys.All.First(k => k.Letters.Contains(letter));
             if(key == null){

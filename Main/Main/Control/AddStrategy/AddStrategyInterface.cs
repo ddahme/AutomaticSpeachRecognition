@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Main.Control.AddStrategy
 {
-    public interface AddStrategyInterface
-    {
-        void Add(CompositeInterface parent, char elementIdent);
+  public interface AddStrategyInterface
+  {
+    void Add(CompositeInterface parent, char elementIdent);
 
-        List<CompositeInterface> AddedElements { get; }
-    }
+    List<CompositeInterface> AddedElements { get; }
+
+    bool IsUsingLernTree { get; }
+  }
 }

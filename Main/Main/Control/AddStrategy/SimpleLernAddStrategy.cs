@@ -7,44 +7,52 @@ using Main.Model;
 
 namespace Main.Control.AddStrategy
 {
-    class SimpleLernAddStrategy : AddStrategyInterface
+  class SimpleLernAddStrategy : AddStrategyInterface
+  {
+    private List<CompositeInterface> _addedElements;
+    public List<CompositeInterface> AddedElements
     {
-        private List<CompositeInterface> _addedElements;
-        public List<CompositeInterface> AddedElements
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public void Add(CompositeInterface parent, char elementIdent)
-        {
-            CompositeInterface node;
-
-            //init List of added Elements
-            _addedElements = new List<CompositeInterface>();
-            //check if element allready exists
-            node = parent.Elements.Value.Find(e => e.Ident == elementIdent);
-            if (node == null)
-            {
-                //create new element
-                node = new Element(elementIdent, parent);
-                //add it to parent
-                parent.Elements.Value.Add(node);
-            }
-            //increase weight of path
-            IncreseWeightRecursiv(node);
-            _addedElements.Add(node);
-        }
-
-        private void IncreseWeightRecursiv(CompositeInterface composite)
-        {
-            composite.IncreaseWeightByOne();
-            if (!composite.IsRoot)
-            {
-                IncreseWeightRecursiv(composite.Parent);
-            }
-        }
+      get
+      {
+        return _addedElements;
+      }
     }
+
+    public bool IsUsingLernTree
+    {
+      get
+      {
+        return false;
+      }
+    }
+
+    public void Add(CompositeInterface parent, char elementIdent)
+    {
+      CompositeInterface node;
+
+      //init List of added Elements
+      _addedElements = new List<CompositeInterface>();
+      //check if element allready exists
+      node = parent.Elements.Find(e => e.Ident == elementIdent);
+      if (node == null)
+      {
+        //create new element
+        node = new Element(elementIdent, parent);
+        //add it to parent
+        parent.Elements.Add(node);
+      }
+      //increase weight of path
+      IncreseWeightRecursiv(node);
+      _addedElements.Add(node);
+    }
+
+    private void IncreseWeightRecursiv(CompositeInterface composite)
+    {
+      composite.IncreaseWeightByOne();
+      if (!composite.IsRoot)
+      {
+        IncreseWeightRecursiv(composite.Parent);
+      }
+    }
+  }
 }
