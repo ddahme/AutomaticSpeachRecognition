@@ -38,7 +38,7 @@ namespace Main.Control.AddStrategy
       {
         var element = new Element(letter, parent);
         parent.Add(element);
-        IncreseWeightRecursiv(element);
+        //IncreseWeightRecursiv(element);
         _addedElements.Add(element);
       }
     }

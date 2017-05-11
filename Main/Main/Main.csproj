@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\AddStrategy\AddStrategyInterface.cs" />
-    <Compile Include="Control\AddStrategy\FancyParseStrategy.cs" />
+    <Compile Include="Control\AddStrategy\MarcowParseStrategy.cs" />
     <Compile Include="Control\AddStrategy\SimpleLernAddStrategy.cs" />
     <Compile Include="Control\AddStrategy\SimpleParseAddStrategy.cs" />
     <Compile Include="Control\KeyController.cs" />

@@ -7,6 +7,8 @@ namespace Main.Model
     {
         bool IsRoot { get;}
         int Weight { get;}
+
+        //ToDo: add 'wahrscheinlichkeit' as double 
         char Ident { get;}
         List<CompositeInterface> Elements { get;}
         CompositeInterface Parent { get;}
