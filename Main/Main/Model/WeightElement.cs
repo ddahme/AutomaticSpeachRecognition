@@ -6,61 +6,8 @@ using System.Threading.Tasks;
 
 namespace Main.Model
 {
-  public class Tree : CompositeInterface
+  public class WeightElement : CompositeInterface
   {
-    private string _name;
-    public string Name
-    {
-      get
-      {
-        return _name;
-      }
-      set
-      {
-        _name = value;
-      }
-    }
-
-    public CompositeInterface Parent
-    {
-      get
-      {
-        return null;
-      }
-    }
-
-    public bool IsRoot
-    {
-      get
-      {
-        return true;
-      }
-    }
-
-    private int _depth;
-    public int Depth
-    {
-      get
-      {
-        return _depth;
-      }
-    }
-
-    private int _weight;
-    public int Weight
-    {
-      get
-      {
-        return _weight;
-      }
-    }
-    public char Ident
-    {
-      get
-      {
-        return ' ';
-      }
-    }
     private List<CompositeInterface> _elements;
     public List<CompositeInterface> Elements
     {
@@ -69,11 +16,44 @@ namespace Main.Model
         return _elements;
       }
     }
-
-    public Tree(int depth)
+    private char _ident;
+    public char Ident
     {
+      get
+      {
+        return _ident;
+      }
+    }
+
+    public bool IsRoot
+    {
+      get
+      {
+        return false;
+      }
+    }
+    private CompositeInterface _parent;
+    public CompositeInterface Parent
+    {
+      get
+      {
+        return _parent;
+      }
+    }
+    private int _weight;
+    public int Weight
+    {
+      get
+      {
+        return _weight;
+      }
+    }
+
+    public WeightElement(char ident, CompositeInterface parent)
+    {
+      _parent = parent;
       _elements = new List<CompositeInterface>();
-      _depth = depth;
+      _ident = ident;
       _weight = 0;
     }
 

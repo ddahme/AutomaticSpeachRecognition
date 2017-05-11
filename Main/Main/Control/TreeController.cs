@@ -26,7 +26,6 @@ namespace Main.Control
     private AddStrategyInterface _lernStrategy;
     private AddStrategyInterface _parseStrategy;
     private int _lernTreeDepth = 7;
-    private int _parseTreeDepth;
     private TreeFactory _lernTreeFactory;
     private TreeFactory _parseTreeFactory;
     private List<string> _testFilePaths;
@@ -111,6 +110,7 @@ namespace Main.Control
       {
         throw new Exception("Unable to test lern-tree because strategy do not use it");
       }
+
       var result = 1.0;
       char letter;
       char keyIdent;
@@ -123,13 +123,9 @@ namespace Main.Control
           {
             letter = (char)reader.Read();
             keyIdent = KeyController.GetKeyToLetter(letter).Name;
-            var addedNotes = ParseKey(keyIdent);
-            var correctNodeWeight = addedNotes.Find(n => n.Ident == letter).Weight;
-            var otherNodeWeigt = addedNotes.FindAll(n => n.Ident != letter).Sum(n => n.Weight);
-            if (otherNodeWeigt != 0)
-            {
-              result *= (correctNodeWeight / otherNodeWeigt);
-            }
+            var addedNotes = ParseKey(keyIdent).Cast<ProbabilityValueElement>();
+            var probalitity = addedNotes.Where(e => e.Ident == letter).FirstOrDefault().ProbalitityValue;
+              result *= probalitity;
           }
         }
       }

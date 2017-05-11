@@ -37,7 +37,7 @@ namespace Main.Control.AddStrategy
       if (node == null)
       {
         //create new element
-        node = new Element(elementIdent, parent);
+        node = new WeightElement(elementIdent, parent);
         //add it to parent
         parent.Elements.Add(node);
       }

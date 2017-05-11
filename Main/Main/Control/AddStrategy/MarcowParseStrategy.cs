@@ -7,48 +7,45 @@ using Main.Model;
 
 namespace Main.Control.AddStrategy
 {
-  public class MarcowParseStrategy : AddStrategyInterface
-  {
-    private double _threshold = 0.3;
-    private CompositeInterface _lernTree;
-    private List<CompositeInterface> _addedElements;
-    public List<CompositeInterface> AddedElements
+    public class MarcowParseStrategy : AddStrategyInterface
     {
-      get
-      {
-        return _addedElements;
-      }
-    }
-
-    public bool IsUsingLernTree
-    {
-      get
-      {
-        return true;
-      }
-    }
-
-    public MarcowParseStrategy(CompositeInterface lernTree)
-    {
-      _lernTree = lernTree;
-    }
-
-    public void Add(CompositeInterface parent, char elementIdent)
-    {
-            var lernElements = _lernTree.Elements.SelectMany(e => e.Elements);
-            var possibleLetters = KeyController.GetKeyByName(elementIdent).Letters;
-            var parentInLernTree = _lernTree.Elements.Where(e => e.Ident == parent.Ident).FirstOrDefault();
-            foreach(var letter in possibleLetters)
+        private CompositeInterface _lernTree;
+        private List<CompositeInterface> _addedElements;
+        public List<CompositeInterface> AddedElements
+        {
+            get
             {
-                var partentWeight = parentInLernTree.Weight;
-                var letterWeight = parentInLernTree.Elements.Where(e => e.Ident == letter).Select(s => s.Weight).FirstOrDefault();
-                var probability = (double)letterWeight / (double)partentWeight;
-                if (probability >= _threshold)
-                {
-                    var element = new Element(elementIdent, parent);
-                    parent.Add(element);
-                }
+                return _addedElements;
             }
         }
-  }
+
+        public bool IsUsingLernTree
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public MarcowParseStrategy(WeightElement lernTree)
+        {
+            _lernTree = lernTree;
+        }
+
+        public void Add(CompositeInterface parent, char elementIdent)
+        {
+            _addedElements = new List<CompositeInterface>();
+            var lernElements = _lernTree.Elements.SelectMany(e => e.Elements);
+            var possibleLetters = KeyController.GetKeyByName(elementIdent).Letters;
+            var parentInLernTree = (WeightElement)_lernTree.Elements.Where(e => e.Ident == parent.Ident).FirstOrDefault();
+            foreach (var letter in possibleLetters)
+            {
+                var elementInLernTree = (WeightElement)parentInLernTree.Elements.Where(e => e.Ident == letter).FirstOrDefault();
+                var probability = (double)elementInLernTree.Weight / (double)parentInLernTree.Weight;
+                var element = new ProbabilityValueElement(elementIdent, parent, probability);
+                parent.Add(element);
+                _addedElements.Add(element);
+            }
+        }
+    }
 }
