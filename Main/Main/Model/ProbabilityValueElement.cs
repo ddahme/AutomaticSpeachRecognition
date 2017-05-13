@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Main.Model
 {
-  public class Element : CompositeInterface
+  public class ProbabilityValueElement : CompositeInterface
   {
     private List<CompositeInterface> _elements;
     public List<CompositeInterface> Elements
@@ -40,25 +40,27 @@ namespace Main.Model
         return _parent;
       }
     }
-    private double _weight;
-    public double Weight
+    private double _probalitityValue;
+    public double ProbalitityValue
     {
       get
       {
-        return _weight;
+        return _probalitityValue;
       }
             set
             {
-                _weight = value;
+                _probalitityValue = value;
             }
     }
 
-    public Element(char ident, CompositeInterface parent)
+    public ProbabilityValueElement(char ident, CompositeInterface parent, double probalitityValue)
     {
-      _parent = parent;
-      _elements = new List<CompositeInterface>();
-      _ident = ident;
-      _weight = 0;
+            _ident = ident;
+            _parent = parent;
+            _probalitityValue = probalitityValue;
+            _elements = new List<CompositeInterface>();
+      
+            
     }
 
     public void Add(CompositeInterface element)
@@ -66,9 +68,9 @@ namespace Main.Model
       _elements.Add(element);
     }
 
-    public void IncreaseWeightByOne()
-    {
-      _weight++;
+        public void IncreaseWeightByOne()
+        {
+            throw new NotImplementedException();
+        }
     }
-  }
 }

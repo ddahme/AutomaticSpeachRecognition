@@ -36,7 +36,7 @@ namespace Main.Control.AddStrategy
       var key = KeyController.GetKeyByName(elementIdent);
       foreach (var letter in key.Letters)
       {
-        var element = new Element(letter, parent);
+        var element = new WeightElement(letter, parent);
         parent.Add(element);
         //IncreseWeightRecursiv(element);
         _addedElements.Add(element);
