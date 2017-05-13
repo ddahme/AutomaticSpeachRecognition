@@ -40,13 +40,17 @@ namespace Main.Model
         return _parent;
       }
     }
-    private int _weight;
-    public int Weight
+    private double _weight;
+    public double Weight
     {
       get
       {
         return _weight;
       }
+            set
+            {
+                _weight = value;
+            }
     }
 
     public Element(char ident, CompositeInterface parent)

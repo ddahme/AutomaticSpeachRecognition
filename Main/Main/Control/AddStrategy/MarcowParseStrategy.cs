@@ -42,10 +42,11 @@ namespace Main.Control.AddStrategy
             {
                 var partentWeight = parentInLernTree.Weight;
                 var letterWeight = parentInLernTree.Elements.Where(e => e.Ident == letter).Select(s => s.Weight).FirstOrDefault();
-                var probability = (double)letterWeight / (double)partentWeight;
+                var probability = letterWeight / partentWeight;
                 if (probability >= _threshold)
                 {
                     var element = new Element(elementIdent, parent);
+                    element.Weight = probability;
                     parent.Add(element);
                 }
             }

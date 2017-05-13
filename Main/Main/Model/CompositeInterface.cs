@@ -6,7 +6,7 @@ namespace Main.Model
     public interface CompositeInterface
     {
         bool IsRoot { get;}
-        int Weight { get;}
+        double Weight { get; set;}
 
         //ToDo: add 'wahrscheinlichkeit' as double 
         char Ident { get;}
