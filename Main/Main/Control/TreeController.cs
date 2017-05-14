@@ -31,42 +31,64 @@ namespace Main.Control
                 return _addStrategies;
             }
         }
-        private AddStrategyInterface _lernStrategy;
+        private Type _lernStrategy;
         public Type LernStrategy
         {
             get
             {
-                return _lernStrategy.GetType();
+                return _lernStrategy;
             }
             set
             {
-                if (value == typeof(SimpleLernStrategy))
+                if (_addStrategies.Contains(value))
                 {
-                    _lernStrategy = new SimpleLernStrategy();
+                    _lernStrategy = value;
                 }
             }
         }
-        private AddStrategyInterface _parseStrategy;
+        private Type _parseStrategy;
         public Type ParseStrategy
         {
             get
             {
-                return _parseStrategy.GetType();
+                return _parseStrategy;
             }
             set
             {
-                if (value == typeof(SimpleParseStrategy))
+                if (_addStrategies.Contains(value))
                 {
-                    _parseStrategy = new SimpleParseStrategy();
-                }
-                else if (value == typeof(MarcowParseStrategy))
-                {
-                    _parseStrategy = new MarcowParseStrategy(_lernTree);
+                    _parseStrategy = value;
                 }
             }
         }
-        private int _lernTreeDepth = 7;
-        private int _parseTreeDepth = 6;
+        private int? _lernTreeDepth;
+        public int? LernTreeDepth
+        {
+            get
+            {
+                return _lernTreeDepth;
+            }
+            set
+            {
+                _lernTreeDepth = value;
+            }
+        }
+        private int? _parseTreeDepth;
+        public int? ParseTreeDepth
+        {
+            get
+            {
+                return _parseTreeDepth;
+            }
+            set
+            {
+                //parse-depth must be smaller than lern-depth
+                if (_lernTreeDepth.HasValue && value < _lernTreeDepth)
+                {
+                    _parseTreeDepth = value;
+                }
+            }
+        }
         private TreeFactory _lernTreeFactory;
         private TreeFactory _parseTreeFactory;
         private Tree _lernTree;
@@ -103,8 +125,6 @@ namespace Main.Control
                 typeof(SimpleParseStrategy),
                 typeof(MarcowParseStrategy)
             };
-            _lernStrategy = new SimpleLernStrategy();
-            _parseStrategy = new SimpleParseStrategy();
         }
 
         public void BuildLernTree()
@@ -175,6 +195,15 @@ namespace Main.Control
             return _parseTreeFactory.AddedElements;
         }
 
+        public List<Element> ParseFile(string path)
+        {
+            if (_parseTreeFactory == null)
+            {
+                _parseTreeFactory = new TreeFactory(_parseStrategy);
+            }
+            return _parseTreeFactory.AddedElements;
+        }
+
         public double GetProbabilityToText(string text)
         {
             foreach(var letter in text)
@@ -185,6 +214,13 @@ namespace Main.Control
             var result = _parseTreeFactory.AddedElements.Where(w => w.Ident == text.Last()).FirstOrDefault().Weight;
             return result;
         }
+
+        public List<KeyValuePair<string,double>> GetBestResults(uint numberOfResults)
+        {
+            throw new NotImplementedException();
+            var result = new List<KeyValuePair<string, double>>();
+            return result;
+        } 
 
         public string ConvertLernTreeToString()
         {
