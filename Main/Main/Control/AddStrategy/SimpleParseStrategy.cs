@@ -11,10 +11,10 @@ namespace Main.Control.AddStrategy
   /// Add-function for live-parsing
   /// just add all possible letters for the key to the list of perents elements.
   /// </summary>
-  public class SimpleParseAddStrategy : AddStrategyInterface
+  public class SimpleParseStrategy : AddStrategyInterface
   {
-    private List<CompositeInterface> _addedElements;
-    public List<CompositeInterface> AddedElements
+    private List<Element> _addedElements;
+    public List<Element> AddedElements
     {
       get
       {
@@ -30,26 +30,28 @@ namespace Main.Control.AddStrategy
       }
     }
 
-    public void Add(CompositeInterface parent, char elementIdent)
+    public void Add(Element parent, char elementIdent)
     {
-      _addedElements = new List<CompositeInterface>();
+      _addedElements = new List<Element>();
       var key = KeyController.GetKeyByName(elementIdent);
       foreach (var letter in key.Letters)
       {
-        var element = new WeightElement(letter, parent);
-        parent.Add(element);
-        //IncreseWeightRecursiv(element);
+                var element = new Element()
+                {
+                    Ident = letter,
+                    Parent = parent,
+                    IsRoot = false,
+                    Elements = new List<Element>(),
+                    Weight = 0
+        };
+        parent.Elements.Add(element);
         _addedElements.Add(element);
       }
     }
 
-    private void IncreseWeightRecursiv(CompositeInterface composite)
-    {
-      composite.IncreaseWeightByOne();
-      if (!composite.IsRoot)
-      {
-        IncreseWeightRecursiv(composite.Parent);
-      }
+        public override string ToString()
+        {
+            return "SimpleParseStrategy";
+        }
     }
-  }
 }

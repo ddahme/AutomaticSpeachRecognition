@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,16 +49,15 @@
   <ItemGroup>
     <Compile Include="Control\AddStrategy\AddStrategyInterface.cs" />
     <Compile Include="Control\AddStrategy\MarcowParseStrategy.cs" />
-    <Compile Include="Control\AddStrategy\SimpleLernAddStrategy.cs" />
-    <Compile Include="Control\AddStrategy\SimpleParseAddStrategy.cs" />
+    <Compile Include="Control\AddStrategy\SimpleLernStrategy.cs" />
+    <Compile Include="Control\AddStrategy\SimpleParseStrategy.cs" />
     <Compile Include="Control\KeyController.cs" />
     <Compile Include="Control\TreeController.cs" />
     <Compile Include="Control\TreeFactory.cs" />
     <Compile Include="Control\UnitOfWork.cs" />
-    <Compile Include="Model\CompositeInterface.cs" />
-    <Compile Include="Model\DataTrasfairObjects\WeightElement.cs" />
-    <Compile Include="Model\ProbabilityValueElement.cs" />
-    <Compile Include="Model\WeightElement.cs" />
+    <Compile Include="Model\DTO\ElementDTO.cs" />
+    <Compile Include="Model\DTO\TreeDTO.cs" />
+    <Compile Include="Model\Element.cs" />
     <Compile Include="Model\Key.cs" />
     <Compile Include="Model\Keys.cs" />
     <Compile Include="Model\Tree.cs" />
@@ -63,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

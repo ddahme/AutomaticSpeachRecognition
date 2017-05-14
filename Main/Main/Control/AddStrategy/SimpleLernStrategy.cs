@@ -7,10 +7,10 @@ using Main.Model;
 
 namespace Main.Control.AddStrategy
 {
-  class SimpleLernAddStrategy : AddStrategyInterface
+  public class SimpleLernStrategy : AddStrategyInterface
   {
-    private List<CompositeInterface> _addedElements;
-    public List<CompositeInterface> AddedElements
+    private List<Element> _addedElements;
+    public List<Element> AddedElements
     {
       get
       {
@@ -26,18 +26,25 @@ namespace Main.Control.AddStrategy
       }
     }
 
-    public void Add(CompositeInterface parent, char elementIdent)
+    public void Add(Element parent, char elementIdent)
     {
-      CompositeInterface node;
+      Element node;
 
       //init List of added Elements
-      _addedElements = new List<CompositeInterface>();
+      _addedElements = new List<Element>();
       //check if element allready exists
       node = parent.Elements.Find(e => e.Ident == elementIdent);
       if (node == null)
       {
-        //create new element
-        node = new WeightElement(elementIdent, parent);
+                //create new element
+                node = new Element()
+                {
+                    Ident = elementIdent,
+                    Parent = parent,
+                    IsRoot = false,
+                    Elements = new List<Element>(),
+                    Weight = 0
+                };
         //add it to parent
         parent.Elements.Add(node);
       }
@@ -46,13 +53,17 @@ namespace Main.Control.AddStrategy
       _addedElements.Add(node);
     }
 
-    private void IncreseWeightRecursiv(CompositeInterface composite)
+    private void IncreseWeightRecursiv(Element composite)
     {
-      composite.IncreaseWeightByOne();
+      composite.Weight++;
       if (!composite.IsRoot)
       {
         IncreseWeightRecursiv(composite.Parent);
       }
     }
-  }
+        public override string ToString()
+        {
+            return "SimpleLernStrategy";
+        }
+    }
 }
