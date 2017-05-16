@@ -61,7 +61,7 @@ namespace Main.Control
             _level = 0;
         }
 
-        public Tree CreateTreeOutOfTextFile(string trainingsFilePath)
+        public Tree AddFile(string trainingsFilePath)
         {
             char letter;
 
