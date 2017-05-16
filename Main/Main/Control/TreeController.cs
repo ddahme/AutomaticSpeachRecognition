@@ -24,7 +24,7 @@ namespace Main.Control
         //TreeController handels TreeFactories and stuff
         private List<Type> _addStrategies;
         //public enum AddStrategies {Undefined, SimpleParseStrategy, SimpleLernStrategy, MarcowParseStrategy};
-        public List<Type> AddStratewgies
+        public List<Type> AddStrategies
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Main.Control
             {
                 return _lernStrategy;
             }
-            set
+            set//ToDo: throw exception
             {
                 if (_addStrategies.Contains(value))
                 {
@@ -53,7 +53,7 @@ namespace Main.Control
             {
                 return _parseStrategy;
             }
-            set
+            set//ToDo: throw exception
             {
                 if (_addStrategies.Contains(value))
                 {
@@ -68,7 +68,7 @@ namespace Main.Control
             {
                 return _lernTreeDepth;
             }
-            set
+            set//ToDo: throw exception
             {
                 _lernTreeDepth = value;
             }
@@ -80,7 +80,7 @@ namespace Main.Control
             {
                 return _parseTreeDepth;
             }
-            set
+            set//ToDo: throw exception
             {
                 //parse-depth must be smaller than lern-depth
                 if (_lernTreeDepth.HasValue && value < _lernTreeDepth)
@@ -99,7 +99,7 @@ namespace Main.Control
             {
                 return _testFilePaths;
             }
-            set
+            set//ToDo: throw exception
             {
                 _testFilePaths = value;
             }
@@ -111,7 +111,7 @@ namespace Main.Control
             {
                 return _lernFilePaths;
             }
-            set
+            set//ToDo: throw exception
             {
                 _lernFilePaths = value;
             }

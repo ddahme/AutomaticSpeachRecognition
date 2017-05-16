@@ -9,7 +9,7 @@ namespace Main.Control
 {
     class UnitOfWork
     {
-        private enum _states { Init, IsInMainMenu, IsInLernMenu, FinishedLoadLernTree, StartSaveLernTree, FinishedSaveLernTree, ReadKeyFromKeyboard, ReadKeyFromFile, ConvertLetterToKey, AddKeyToParseTree, ChangeParseTree, StartLoadLernTree, BuildLernTree, SaveLernTree, TestLernTree, PrintTree, Error, IsInUtilMenu, IsInConfigMenu, IsInParseMenu, StartBuildLernTree, FinischedBuildLernTree, StartTestLernTree, FinishedTestLernTree, StartParseKey, FinishedParseKey, StartParseFile, FinishedParseFile, StartProbabilityOfLetter, FinishedProbabilityOfLetter, StartProbabilityOfText, FinishedProbabilityOfText, StartGetBestResults, FinishedGetBestResults, StartSetStrategy, FinishedSetStrategy };
+        private enum _states { Init, IsInMainMenu, IsInLernMenu, FinishedLoadLernTree, StartSaveLernTree, FinishedSaveLernTree, ReadKeyFromKeyboard, ReadKeyFromFile, ConvertLetterToKey, AddKeyToParseTree, ChangeParseTree, StartLoadLernTree, BuildLernTree, SaveLernTree, TestLernTree, PrintTree, Error, IsInUtilMenu, IsInConfigMenu, IsInParseMenu, StartBuildLernTree, FinischedBuildLernTree, StartTestLernTree, FinishedTestLernTree, StartParseKey, FinishedParseKey, StartParseFile, FinishedParseFile, StartProbabilityOfLetter, FinishedProbabilityOfLetter, StartProbabilityOfText, FinishedProbabilityOfText, StartGetBestResults, FinishedGetBestResults, StartSetStrategy, FinishedSetStrategy, StartSetDepth, FinishedSetDepth, StartConvertMenu, FinishedConvertMenu, FinishedConvertLetterFileToKeyFile, StartConvertLetterFileToKeyFile, IsInDrawMenu };
         private List<_states> _lastStates;
         private _states _state
         {
@@ -33,7 +33,7 @@ namespace Main.Control
         private UnitOfWork()
         {
             _lastStates = new List<_states>();
-            _lastStates.Add(_states.Init);
+            _state = _states.Init;
             _treeController = new TreeController();
             MainMenu();
         }
@@ -412,7 +412,11 @@ namespace Main.Control
                 var n = 0;
                 if(int.TryParse(input, out n))
                 {
-                    _treeController.GetBestResults((uint)n);
+                    var results = _treeController.GetBestResults((uint)n);
+                    foreach(var result in results)
+                    {
+                        Console.WriteLine("{0}. result with a probability of {1}: {2}", results.IndexOf(result), result.Value, result.Key);
+                    }
                 }
             }
             catch(Exception exception)
@@ -458,14 +462,126 @@ namespace Main.Control
 
         private void SetStrategyMenu()
         {
+            bool isFinished = false;
+            bool isLern = false;
+            bool isParse = false;
             _state = _states.StartSetStrategy;
-            Console.WriteLine("Please select ");
+            Console.WriteLine("Please select which strategy you want to set.");
+            Console.WriteLine("[L]ern");
+            Console.WriteLine("[P]arse");
+            Console.WriteLine("Esc to get back");
+            Console.WriteLine("Then select the strategy you want to use.");
+            foreach (var strategy in _treeController.AddStrategies)
+            {
+                Console.WriteLine("[{0}]: {1}",_treeController.AddStrategies.IndexOf(strategy) ,strategy.ToString());
+                }
+            while (!isFinished)
+            {
+                var input = Console.ReadKey();
+                switch (input.Key)
+                {
+                    case (ConsoleKey.L):
+                        isLern = true;
+                        isParse = false;
+                        break;
+                    case (ConsoleKey.P):
+                        isLern = false;
+                        isParse = true;
+                        break;
+                    case (ConsoleKey.Escape):
+                        isFinished = true;
+                        return;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input.");
+                        break;
+                }
+                input = Console.ReadKey();
+                int index;
+                if (int.TryParse(input.KeyChar.ToString(), out index))
+                {
+                    try
+                    {
+                        if (isLern)
+                        {
+                            _treeController.LernStrategy = _treeController.AddStrategies[index];
+                        }
+                        if (isParse)
+                        {
+                            _treeController.ParseStrategy = _treeController.AddStrategies[index];
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Error(exception);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input.");
+                }
+            }
             _state = _states.FinishedSetStrategy;
         }
 
         private void SetDepthMenu()
         {
-
+            bool isFinished = false;
+            bool isLern = false;
+            bool isParse = false;
+            _state = _states.StartSetDepth;
+            Console.WriteLine("Please select which depth you want to set.");
+            Console.WriteLine("[L]ern");
+            Console.WriteLine("[P]arse");
+            Console.WriteLine("Esc to get back");
+            Console.WriteLine("Then enter the depth.");
+            while (!isFinished)
+            {
+                var input = Console.ReadKey();
+                switch (input.Key)
+                {
+                    case (ConsoleKey.L):
+                        isLern = true;
+                        isParse = false;
+                        break;
+                    case (ConsoleKey.P):
+                        isLern = false;
+                        isParse = true;
+                        break;
+                    case (ConsoleKey.Escape):
+                        isFinished = true;
+                        return;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input.");
+                        break;
+                }
+                var input2 = Console.ReadLine();
+                int depth;
+                if (int.TryParse(input2, out depth))
+                {
+                    try
+                    {
+                        if (isLern)
+                        {
+                            _treeController.LernTreeDepth = depth;
+                        }
+                        if (isParse)
+                        {
+                            _treeController.ParseTreeDepth = depth;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Error(exception);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input.");
+                }
+            }
+            _state = _states.FinishedSetDepth;
         }
 
         private void UtilMenu()
@@ -504,180 +620,99 @@ namespace Main.Control
 
         private void ConvertMenu()
         {
-
+            bool validSelect = false;
+            _state = _states.StartConvertMenu;
+            Console.WriteLine("<<<<Convert-menu>>>>");
+            Console.WriteLine("Please select:");
+            Console.WriteLine("convert [F]ile of letters to file of keys");
+            Console.WriteLine("Esc to get back");
+            while (!validSelect)
+            {
+                var input = Console.ReadKey();
+                switch (input.Key)
+                {
+                    case (ConsoleKey.F):
+                        validSelect = true;
+                        ConvertLetterFileToKeyFileMenu();
+                        break;
+                    case (ConsoleKey.C):
+                        validSelect = true;
+                        ConvertMenu();
+                        break;
+                    case (ConsoleKey.Escape):
+                        validSelect = true;
+                        return;
+                        break;
+                    default:
+                        validSelect = false;
+                        Console.WriteLine("Invalid Input.");
+                        break;
+                }
+            }
+            _state = _states.FinishedConvertMenu;
         }
 
-        private void ConvertLetterFileToKeyFile()
+        private void ConvertLetterFileToKeyFileMenu()
         {
+            char letter;
+            char keyIdent;
+            _state = _states.StartConvertLetterFileToKeyFile;
+            Console.WriteLine("Please enter path to file you want to convert.");
+            var inputFilePath = Console.ReadLine();
+            Console.WriteLine("Please enter path of ouitputfile.");
+            var outputFilePath = Console.ReadLine();
+            try
+            {
+                var fileStreamIn = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                var fileStreamOut = new FileStream(outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
+                using (var reader = new StreamReader(fileStreamIn))
+                {
+                    using (var writer = new StreamWriter(fileStreamOut))
+                    {
 
+                        while (!reader.EndOfStream)
+                        {
+                            letter = (char)reader.Read();
+                            keyIdent = KeyController.GetKeyToLetter(letter).Name;
+                            writer.Write(keyIdent);
+                        }
+                        writer.Close();
+                    }
+                }
+            }catch(Exception exception)
+            {
+                Error(exception);
+            }
+            _state = _states.FinishedConvertLetterFileToKeyFile;
         }
 
         private void DrawMenu()
         {
-
-        }
-
-
-        private void BuildLernTree()
-        {
-            _lastStates.Add(_states.BuildLernTree);
-
-            MainMenu();
-        }
-
-        private void SaveLernTree()
-        {
-
-        }
-
-        private void TestLernTree()
-        {
-            string[] input;
-            var filePaths = new List<String>();
-            Console.WriteLine("Please select files to test lern-tree");
-            Console.WriteLine("You can select more by seperate them with a , like A,H");
-            Console.WriteLine("Adventures of [H]uckleberry Finn (606,623 letters)");
-            Console.WriteLine("[A]lice adventures in Wonderland (167,515 letters)");
-            Console.WriteLine("[p]ride and prejudice (717,571 letters)");
-            Console.WriteLine("the adventures of [S]herlock Holmes (594,915 letters)");
-            Console.WriteLine("the [j]ungle book (298,775 letters)");
-
-            input = Console.ReadLine().Split(',');
-
-            Console.WriteLine("You selected:");
-            foreach (var letter in input)
+            bool isFinished = false;
+            _state = _states.IsInDrawMenu;
+            Console.WriteLine("<<<<Draw-menu>>>>");
+            Console.WriteLine("Please select:");
+            Console.WriteLine("Draw [L]ernTree");
+            Console.WriteLine("Esc to get back");
+            while (!isFinished)
             {
-                var fileName = string.Empty;
-                switch (letter.ToUpper())
+                var input = Console.ReadKey();
+                switch (input.Key)
                 {
-                    case "H":
-                        fileName = "adventures_of_huckleberry_finn.txt";
+                    case (ConsoleKey.L):
+                        var result = _treeController.ConvertLernTreeToString();
+                        Console.WriteLine(result);
                         break;
-                    case "A":
-                        fileName = "alices_adventures_in_wonderland.txt";
-                        break;
-                    case "P":
-                        fileName = "pride_and_prejudice.txt";
-                        break;
-                    case "S":
-                        fileName = "the_adevntures_of_sherlock_holmes.txt";
-                        break;
-                    case "J":
-                        fileName = "the_jungle_book.txt";
+                    case (ConsoleKey.Escape):
+                        isFinished = true;
+                        return;
                         break;
                     default:
-                        break;
-                }
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    Console.WriteLine(fileName);
-                    filePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", fileName));
-                }
-            }
-            _treeController.TestFilePaths = filePaths;
-            try
-            {
-                var result = _treeController.TestLernTree();
-                Console.WriteLine("The result of the test is {0}.", result.ToString());
-            }
-            catch (Exception exception)
-            {
-                Error(exception);
-            }
-            MainMenu();
-        }
-
-        private void PrintTree()
-        {
-            var input = string.Empty;
-            Console.WriteLine("Do you want to print the [L]ern-tre, the [P]arse-tree or all possible [R]esults?");
-            input = Console.ReadLine().ToUpper();
-            try
-            {
-                switch (input)
-                {
-                    case "L":
-                        Console.Write(_treeController.ConvertLernTreeToString());
-                        break;
-                    case "P":
-                        Console.Write(_treeController.ConvertParseTreeToString());
-                        break;
-                    case "R":
-                        foreach (var result in _treeController.PossibleResults())
-                        {
-                            Console.WriteLine(result);
-                        }
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input");
+                        isFinished = false;
+                        Console.WriteLine("Invalid Input.");
                         break;
                 }
             }
-            catch (Exception exception)
-            {
-                Error(exception);
-            }
-            MainMenu();
-        }
-
-        private void ParseKeyFormKeyboard()
-        {
-            ConsoleKey input;
-            bool isRunning = true;
-            _lastStates.Add(_states.ReadKeyFromKeyboard);
-            Console.WriteLine("Please enter key you want to parse. Or press Esc to exit.");
-            while (isRunning)
-            {
-                input = Console.ReadKey().Key;
-                isRunning = (input != ConsoleKey.Escape);
-                var inputAsChar = (char)input;
-                if (KeyController.IsValideKey(inputAsChar))
-                {
-                    _treeController.ParseKey(inputAsChar);
-                }
-            }
-            MainMenu();
-        }
-
-        private void ParseKeyFromFile()
-        {
-            char ident;
-            _lastStates.Add(_states.ReadKeyFromFile);
-            Console.WriteLine("Please enter path to file.");
-            var input = Console.ReadLine();
-            try
-            {
-                var fs = new FileStream(input, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using (var reader = new StreamReader(fs))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        //read key form text
-                        ident = (char)reader.Read();
-                        _treeController.ParseKey(ident);
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Error(exception);
-            }
-            MainMenu();
-        }
-
-        private void ConvertLetterToKey()
-        {
-            var result = new StringBuilder();
-            var input = string.Empty;
-            _lastStates.Add(_states.ConvertLetterToKey);
-            Console.WriteLine("Please enter letter to convert to key.");
-            input = Console.ReadLine();
-            foreach (var letter in input)
-            {
-                result.Append(KeyController.GetKeyToLetter(letter).Name);
-            }
-            Console.WriteLine("the result to your inpot is: {0}", result);
-            MainMenu();
         }
 
         private void Error(Exception exception)
