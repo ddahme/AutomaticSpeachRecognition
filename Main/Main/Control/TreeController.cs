@@ -143,6 +143,8 @@ namespace Main.Control
                 typeof(SimpleParseStrategy),
                 typeof(MarcowParseStrategy)
             };
+            _lernFilePaths = new List<string>();
+            _testFilePaths = new List<string>();
         }
 
         public void BuildLernTree()
@@ -214,10 +216,16 @@ namespace Main.Control
             if (_parseTreeFactory == null)
             {
                 var strategy = CreateInstaceOfStategy(_parseStrategy);
-                _parseTreeFactory = new TreeFactory(strategy);
+                _parseTreeFactory = new TreeFactory(strategy, _parseTreeDepth);
             }
             _parseTreeFactory.Add(ident);
             return _parseTreeFactory.AddedElements;
+        }
+
+        public void ResetParseTree()
+        {
+            var strategy = CreateInstaceOfStategy(_parseStrategy);
+            _parseTreeFactory = new TreeFactory(strategy, _parseTreeDepth);
         }
 
         private AddStrategyInterface CreateInstaceOfStategy(Type type)

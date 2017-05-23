@@ -35,13 +35,18 @@ namespace Main.Control.AddStrategy
         public void Add(Element parent, char elementIdent)
         {
             _addedElements = new List<Element>();
-            var lernElements = _lernTree.Elements.SelectMany(e => e.Elements);
+            //var lernElements = _lernTree.Elements.SelectMany(e => e.Elements);
             var possibleLetters = KeyController.GetKeyByName(elementIdent).Letters;
             var parentInLernTree = _lernTree.Elements.Where(e => e.Ident == parent.Ident).FirstOrDefault();
             foreach (var letter in possibleLetters)
             {
                 var elementInLernTree = parentInLernTree.Elements.Where(e => e.Ident == letter).FirstOrDefault();
-                var probability = elementInLernTree.Weight / parentInLernTree.Weight;
+                //ToDo thinlk about elements which are not in the lerntree
+                var probability = 0.0;
+                if (elementInLernTree != null && parentInLernTree != null)
+                {
+                    probability = elementInLernTree.Weight / parentInLernTree.Weight;
+                }
                 var element = new Element()
                 {
                     Ident = letter,

@@ -35,91 +35,103 @@ namespace Main.Control
             _lastStates = new List<_states>();
             _state = _states.Init;
             _treeController = new TreeController();
+            SetDefaultValues();
             MainMenu();
         }
 
         private void MainMenu()
         {
-            bool validSelect = false;
+            bool isBreaking = false;
             _state = _states.IsInMainMenu;
-            Console.WriteLine("<<<<Main-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("[L]earn");
-            Console.WriteLine("[P]arse");
-            Console.WriteLine("[C]onfig");
-            Console.WriteLine("[U]til");
-            Console.WriteLine("Esc to get back");
-            while (!validSelect)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Main-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("[L]earn");
+                Console.WriteLine("[P]arse");
+                Console.WriteLine("[C]onfig");
+                Console.WriteLine("[U]til");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case (ConsoleKey.L):
-                        validSelect = true;
                         LernMenu();
                         break;
                     case (ConsoleKey.P):
-                        validSelect = true;
                         ParseMenu();
                         break;
                     case (ConsoleKey.C):
-                        validSelect = true;
                         ConfigMenu();
                         break;
                     case (ConsoleKey.U):
-                        validSelect = true;
                         UtilMenu();
                         break;
                     case (ConsoleKey.Escape):
-                        validSelect = true;
-                        break;
+                        isBreaking = true;
                         break;
                     default:
-                        validSelect = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
             }
         }
 
+        private void SetDefaultValues()
+        {
+            Console.WriteLine("set default values");
+            try
+            {
+                _treeController.LernStrategy = typeof(AddStrategy.SimpleLernStrategy);
+                _treeController.LernTreeDepth = 7;
+                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "adventures_of_huckleberry_finn.txt"));
+                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
+                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
+                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
+                _treeController.BuildLernTree();
+                _treeController.ParseStrategy = typeof(AddStrategy.MarcowParseStrategy);
+                _treeController.ParseTreeDepth = 7;
+            }
+            catch (Exception exception)
+            {
+                Error(exception);
+            }
+        }
+
         private void LernMenu()
         {
-            bool validSelect = false;
+            bool isBreaking = false;
             _state = _states.IsInLernMenu;
-            Console.WriteLine("<<<<Lern-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("[L]oad tree");
-            Console.WriteLine("[S]ave tree");
-            Console.WriteLine("[B]uild tree");
-            Console.WriteLine("[T]est tree");
-            Console.WriteLine("Esc to get back");
-            while (!validSelect)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Lern-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("[L]oad tree");
+                Console.WriteLine("[S]ave tree");
+                Console.WriteLine("[B]uild tree");
+                Console.WriteLine("[T]est tree");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case (ConsoleKey.L):
-                        validSelect = true;
                         LoadLernTreeMenu();
                         break;
                     case (ConsoleKey.S):
-                        validSelect = true;
                         SaveLernTreeMenu();
                         break;
                     case (ConsoleKey.B):
-                        validSelect = true;
                         BuildLernTreeMenu();
                         break;
                     case (ConsoleKey.T):
-                        validSelect = true;
                         TestLernTreeMenu();
                         break;
                     case (ConsoleKey.Escape):
-                        validSelect = true;
-                        return;
+                        isBreaking = true;
                         break;
                     default:
-                        validSelect = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
@@ -268,47 +280,42 @@ namespace Main.Control
 
         private void ParseMenu()
         {
-            bool validSelect = false;
+            bool isBreaking = false;
             _state = _states.IsInParseMenu;
-            Console.WriteLine("<<<<Parse-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("Parse [K]ey");
-            Console.WriteLine("Parse [F]ile");
-            Console.WriteLine("Get probability of [L]etter");
-            Console.WriteLine("Get probability of [T]ext");
-            Console.WriteLine("Get [B]est results");
-            Console.WriteLine("Esc to get back");
-            while (!validSelect)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Parse-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("Parse [K]ey");
+                Console.WriteLine("Parse [F]ile");
+                Console.WriteLine("Get probability of [L]etter");
+                Console.WriteLine("Get probability of [T]ext");
+                Console.WriteLine("Get [B]est results");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case (ConsoleKey.K):
-                        validSelect = true;
                         ParseKeyMenu();
                         break;
                     case (ConsoleKey.F):
-                        validSelect = true;
                         ParseFileMenu();
                         break;
                     case (ConsoleKey.L):
-                        validSelect = true;
                         GetProbabilityOfLetterMenu();
                         break;
                     case (ConsoleKey.T):
-                        validSelect = true;
                         GetProbabilityOfTextMenu();
                         break;
                     case (ConsoleKey.B):
-                        validSelect = true;
                         GetBestResultsMenu();
                         break;
                     case (ConsoleKey.Escape):
-                        validSelect = true;
+                        isBreaking = true;
                         return;
                         break;
                     default:
-                        validSelect = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
@@ -318,9 +325,9 @@ namespace Main.Control
         private void ParseKeyMenu()
         {
             _state = _states.StartParseKey;
-            bool isRunning = false;
+            bool isBreaking = false;
             Console.WriteLine("Please enter key you want to parse. or Esc to exit. Valid keys are {0}", Keys.All.Select(k => k.Name));
-            while (!isRunning)
+            while (!isBreaking)
             {
                 var input = Console.ReadKey();
                 if (KeyController.IsValideKey(input.KeyChar))
@@ -336,7 +343,7 @@ namespace Main.Control
                 }
                 else if (input.Key == ConsoleKey.Escape)
                 {
-                    isRunning = false;
+                    isBreaking = true;
                 }
                 else
                 {
@@ -371,13 +378,14 @@ namespace Main.Control
             try
             {
                 var key = KeyController.GetKeyToLetter(input).Name;
-                result = _treeController.ParseKey(key).Where(e => e.Ident == input).FirstOrDefault().Weight;
+                var resultSet = _treeController.ParseKey(key);
+                result = resultSet.Where(e => e.Ident == input).FirstOrDefault().Weight;
             }
             catch (Exception exception)
             {
                 Error(exception);
             }
-            Console.WriteLine("Your text has an probability of: {}", result);
+            Console.WriteLine("Your text has an probability of: {0}", result);
             _state = _states.FinishedProbabilityOfLetter;
         }
 
@@ -398,7 +406,7 @@ namespace Main.Control
                     Error(exception);
                 }
             }
-            Console.WriteLine("Your text has an probability of: {}", result);
+            Console.WriteLine("Your text has an probability of: {0}", result);
             _state = _states.FinishedProbabilityOfText;
         }
 
@@ -410,16 +418,16 @@ namespace Main.Control
             try
             {
                 var n = 0;
-                if(int.TryParse(input, out n))
+                if (int.TryParse(input, out n))
                 {
                     var results = _treeController.GetBestResults((uint)n);
-                    foreach(var result in results)
+                    foreach (var result in results)
                     {
-                        Console.WriteLine("{0}. result with a probability of {1}: {2}", results.IndexOf(result), result.Value, result.Key);
+                        Console.WriteLine("{0}. result with a probability of {0}: {1}", results.IndexOf(result), result.Value, result.Key);
                     }
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Error(exception);
             }
@@ -428,32 +436,30 @@ namespace Main.Control
 
         private void ConfigMenu()
         {
-            bool validSelect = false;
+            bool isBreaking = false;
             _state = _states.IsInConfigMenu;
-            Console.WriteLine("<<<<Config-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("set [S]trategy");
-            Console.WriteLine("set [D]epth");
-            Console.WriteLine("Esc to get back");
-            while (!validSelect)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Config-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("set [S]trategy");
+                Console.WriteLine("set [D]epth");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case (ConsoleKey.S):
-                        validSelect = true;
                         SetStrategyMenu();
                         break;
                     case (ConsoleKey.D):
-                        validSelect = true;
                         SetDepthMenu();
                         break;
                     case (ConsoleKey.Escape):
-                        validSelect = true;
+                        isBreaking = true;
                         return;
                         break;
                     default:
-                        validSelect = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
@@ -473,30 +479,11 @@ namespace Main.Control
             Console.WriteLine("Then select the strategy you want to use.");
             foreach (var strategy in _treeController.AddStrategies)
             {
-                Console.WriteLine("[{0}]: {1}",_treeController.AddStrategies.IndexOf(strategy) ,strategy.ToString());
-                }
+                Console.WriteLine("[{0}]: {1}", _treeController.AddStrategies.IndexOf(strategy), strategy.ToString());
+            }
             while (!isFinished)
             {
                 var input = Console.ReadKey();
-                switch (input.Key)
-                {
-                    case (ConsoleKey.L):
-                        isLern = true;
-                        isParse = false;
-                        break;
-                    case (ConsoleKey.P):
-                        isLern = false;
-                        isParse = true;
-                        break;
-                    case (ConsoleKey.Escape):
-                        isFinished = true;
-                        return;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input.");
-                        break;
-                }
-                input = Console.ReadKey();
                 int index;
                 if (int.TryParse(input.KeyChar.ToString(), out index))
                 {
@@ -505,10 +492,12 @@ namespace Main.Control
                         if (isLern)
                         {
                             _treeController.LernStrategy = _treeController.AddStrategies[index];
+                            isFinished = true;
                         }
                         if (isParse)
                         {
                             _treeController.ParseStrategy = _treeController.AddStrategies[index];
+                            isFinished = true;
                         }
                     }
                     catch (Exception exception)
@@ -518,7 +507,26 @@ namespace Main.Control
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input.");
+                    switch (input.Key)
+                    {
+                        case (ConsoleKey.L):
+                            Console.WriteLine("Lernstrategy:");
+                            isLern = true;
+                            isParse = false;
+                            break;
+                        case (ConsoleKey.P):
+                            Console.WriteLine("Parsestrategy:");
+                            isLern = false;
+                            isParse = true;
+                            break;
+                        case (ConsoleKey.Escape):
+                            isFinished = true;
+                            return;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid input.");
+                            break;
+                    }
                 }
             }
             _state = _states.FinishedSetStrategy;
@@ -534,41 +542,24 @@ namespace Main.Control
             Console.WriteLine("[L]ern");
             Console.WriteLine("[P]arse");
             Console.WriteLine("Esc to get back");
-            Console.WriteLine("Then enter the depth.");
+            Console.WriteLine("Then enter the depth.[1-9]");
             while (!isFinished)
             {
                 var input = Console.ReadKey();
-                switch (input.Key)
-                {
-                    case (ConsoleKey.L):
-                        isLern = true;
-                        isParse = false;
-                        break;
-                    case (ConsoleKey.P):
-                        isLern = false;
-                        isParse = true;
-                        break;
-                    case (ConsoleKey.Escape):
-                        isFinished = true;
-                        return;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input.");
-                        break;
-                }
-                var input2 = Console.ReadLine();
                 int depth;
-                if (int.TryParse(input2, out depth))
+                if (int.TryParse(input.KeyChar.ToString(), out depth))
                 {
                     try
                     {
                         if (isLern)
                         {
                             _treeController.LernTreeDepth = depth;
+                            isFinished = true;
                         }
                         if (isParse)
                         {
                             _treeController.ParseTreeDepth = depth;
+                            isFinished = true;
                         }
                     }
                     catch (Exception exception)
@@ -577,41 +568,56 @@ namespace Main.Control
                     }
                 }
                 else
-                {
-                    Console.WriteLine("Invalid input.");
-                }
+                    switch (input.Key)
+                    {
+                        case (ConsoleKey.L):
+                            isLern = true;
+                            isParse = false;
+                            Console.WriteLine("Lerndepth:");
+                            break;
+                        case (ConsoleKey.P):
+                            isLern = false;
+                            isParse = true;
+                            Console.WriteLine("Parsedepth:");
+                            break;
+                        case (ConsoleKey.Escape):
+                            isFinished = true;
+                            return;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid input.");
+                            break;
+                    }
             }
             _state = _states.FinishedSetDepth;
         }
 
         private void UtilMenu()
         {
-            bool validSelect = false;
+            bool isBreaking = false;
             _state = _states.IsInUtilMenu;
-            Console.WriteLine("<<<<Util-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("[D]raw");
-            Console.WriteLine("[C]onvert");
-            Console.WriteLine("Esc to get back");
-            while (!validSelect)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Util-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("[D]raw");
+                Console.WriteLine("[C]onvert");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case (ConsoleKey.D):
-                        validSelect = true;
                         DrawMenu();
                         break;
                     case (ConsoleKey.C):
-                        validSelect = true;
                         ConvertMenu();
                         break;
                     case (ConsoleKey.Escape):
-                        validSelect = true;
+                        isBreaking = true;
                         return;
                         break;
                     default:
-                        validSelect = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
@@ -620,31 +626,29 @@ namespace Main.Control
 
         private void ConvertMenu()
         {
-            bool validSelect = false;
+            bool isBreaking = false;
             _state = _states.StartConvertMenu;
-            Console.WriteLine("<<<<Convert-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("convert [F]ile of letters to file of keys");
-            Console.WriteLine("Esc to get back");
-            while (!validSelect)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Convert-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("convert [F]ile of letters to file of keys");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
                     case (ConsoleKey.F):
-                        validSelect = true;
                         ConvertLetterFileToKeyFileMenu();
                         break;
                     case (ConsoleKey.C):
-                        validSelect = true;
                         ConvertMenu();
                         break;
                     case (ConsoleKey.Escape):
-                        validSelect = true;
+                        isBreaking = true;
                         return;
                         break;
                     default:
-                        validSelect = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
@@ -679,7 +683,8 @@ namespace Main.Control
                         writer.Close();
                     }
                 }
-            }catch(Exception exception)
+            }
+            catch (Exception exception)
             {
                 Error(exception);
             }
@@ -688,14 +693,15 @@ namespace Main.Control
 
         private void DrawMenu()
         {
-            bool isFinished = false;
+            bool isBreaking = false;
             _state = _states.IsInDrawMenu;
-            Console.WriteLine("<<<<Draw-menu>>>>");
-            Console.WriteLine("Please select:");
-            Console.WriteLine("Draw [L]ernTree");
-            Console.WriteLine("Esc to get back");
-            while (!isFinished)
+            while (!isBreaking)
             {
+                Console.WriteLine("<<<<Draw-menu>>>>");
+                Console.WriteLine("Please select:");
+                Console.WriteLine("Draw [L]ernTree");
+                Console.WriteLine("Esc to get back");
+
                 var input = Console.ReadKey();
                 switch (input.Key)
                 {
@@ -704,11 +710,10 @@ namespace Main.Control
                         Console.WriteLine(result);
                         break;
                     case (ConsoleKey.Escape):
-                        isFinished = true;
+                        isBreaking = true;
                         return;
                         break;
                     default:
-                        isFinished = false;
                         Console.WriteLine("Invalid Input.");
                         break;
                 }
