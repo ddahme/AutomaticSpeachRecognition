@@ -89,8 +89,9 @@ namespace Main.Control
                 _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
                 _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
                 _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
-                _treeController.BuildLernTree();
-                _treeController.ParseStrategy = typeof(AddStrategy.MarcowParseStrategy);
+                //_treeController.BuildLernTree();
+                _treeController.RestoreLernTree("D:\\Studium\\10SoSe2017\\03AutomatischeSprachverarbeitung\\03Praktikum\\Praktikum3\\learnTree.xml");
+                _treeController.ParseStrategy = typeof(AddStrategy.P5);
                 _treeController.ParseTreeDepth = 7;
             }
             catch (Exception exception)
@@ -378,6 +379,7 @@ namespace Main.Control
             try
             {
                 var key = KeyController.GetKeyToLetter(input).Name;
+                _treeController.ResetParseTree();
                 var resultSet = _treeController.ParseKey(key);
                 result = resultSet.Where(e => e.Ident == input).FirstOrDefault().Weight;
             }
@@ -399,7 +401,9 @@ namespace Main.Control
             {
                 try
                 {
-                    result = _treeController.ParseKey(letter).Where(e => e.Ident == letter).FirstOrDefault().Weight;
+                    var key = KeyController.GetKeyToLetter(letter);
+                    var addedElements = _treeController.ParseKey(key.Name);
+                    result = addedElements.Where(e => e.Ident == letter).FirstOrDefault().Weight;
                 }
                 catch (Exception exception)
                 {

@@ -49,14 +49,11 @@
   <ItemGroup>
     <Compile Include="Control\AddStrategy\AddStrategyInterface.cs" />
     <Compile Include="Control\AddStrategy\MarcowParseStrategy.cs" />
-    <Compile Include="Control\AddStrategy\P51.cs" />
-    <Compile Include="Control\AddStrategy\P52.cs" />
-    <Compile Include="Control\AddStrategy\P53.cs" />
-    <Compile Include="Control\AddStrategy\P54.cs" />
-    <Compile Include="Control\AddStrategy\P64.cs" />
+    <Compile Include="Control\AddStrategy\P5.cs" />
     <Compile Include="Control\AddStrategy\SimpleLernStrategy.cs" />
     <Compile Include="Control\AddStrategy\SimpleParseStrategy.cs" />
     <Compile Include="Control\KeyController.cs" />
+    <Compile Include="Control\LernTreeFactory.cs" />
     <Compile Include="Control\TreeController.cs" />
     <Compile Include="Control\TreeFactory.cs" />
     <Compile Include="Control\UnitOfWork.cs" />

@@ -13,12 +13,12 @@ namespace Main.Control
 {
     public class TreeFactory
     {
-        private List<Element> _addedElementsInLastCall;
+        private List<Element> _addedElements;
         public List<Element> AddedElements
         {
             get
             {
-                return _addedElementsInLastCall;
+                return _addedElements;
             }
         }
         private List<Element> _rootList;
@@ -53,11 +53,11 @@ namespace Main.Control
                 Elements = new List<Element>(),
                 Ident = ' ',
                 IsRoot = true,
-                Weight = 0
+                Weight = 1.0
             };
             _rootList = new List<Element>();
             _rootList.Add(_tree);
-            _addedElementsInLastCall = _rootList;
+            _addedElements = _rootList;
             _level = 0;
         }
 
@@ -82,30 +82,28 @@ namespace Main.Control
 
         public void Add(char ident)
         {
-            var addedElementsInCurrentCall = new List<Element>();
+            List<Element> addedElementsInLastCall;
+            //if the trees depth is restricted by _depth, check if this level is to deep
+            if (_depth > 0 && (_level % _depth) == 0)
+            {
+                addedElementsInLastCall = _rootList;
+            }
+            else
+            {
+                addedElementsInLastCall = _addedElements;
+            }
+            //remove aded elements of last call from list
+            _addedElements = new List<Element>();
 
             //for each added element in the last iteration
-            foreach (var parent in _addedElementsInLastCall)
+            foreach (var parent in addedElementsInLastCall)
             {
                 //call the add-strategy
                 _addStrategy.Add(parent, ident);
                 //add add the result to the list of added elementrs for the next level
-                addedElementsInCurrentCall.AddRange(_addStrategy.AddedElements);
+                _addedElements.AddRange(_addStrategy.AddedElements);
             }
-
-            //increment level
             _level++;
-            //if the trees depth is restricted by _depth, check if this level is to deep
-            if (_depth > 0 && ((_level) % _depth) == 0)
-            {
-                //if it is use the root as last level
-                _addedElementsInLastCall = _rootList;
-            }
-            else
-            {
-                //if it is not just use the added elements of this iteratrion for the next one and go ahead
-                _addedElementsInLastCall = addedElementsInCurrentCall;
-            }
         }
     }
 }

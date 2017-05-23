@@ -92,7 +92,7 @@ namespace Main.Control
                     _parseTreeDepth = value;
             }
         }
-        private TreeFactory _lernTreeFactory;
+        private LernTreeFactory _lernTreeFactory;
         private TreeFactory _parseTreeFactory;
         private Tree _lernTree;
         private List<string> _testFilePaths;
@@ -141,7 +141,8 @@ namespace Main.Control
             {
                 typeof(SimpleLernStrategy),
                 typeof(SimpleParseStrategy),
-                typeof(MarcowParseStrategy)
+                typeof(MarcowParseStrategy),
+                typeof(P5)
             };
             _lernFilePaths = new List<string>();
             _testFilePaths = new List<string>();
@@ -150,7 +151,7 @@ namespace Main.Control
         public void BuildLernTree()
         {
             var strategy = CreateInstaceOfStategy(_lernStrategy);
-            _lernTreeFactory = new TreeFactory(strategy, _lernTreeDepth);
+            _lernTreeFactory = new LernTreeFactory(strategy, _lernTreeDepth);
 
             foreach (var filePath in _lernFilePaths)
             {
@@ -235,7 +236,7 @@ namespace Main.Control
                 var strategy = (AddStrategyInterface)Activator.CreateInstance(type);
                 return strategy;
             }
-            if(type == typeof(MarcowParseStrategy))
+            if(type == typeof(MarcowParseStrategy) || type == typeof(P5))
             {
                 var strategy = (AddStrategyInterface)Activator.CreateInstance(type, _lernTree);
                 return strategy;
@@ -368,7 +369,8 @@ namespace Main.Control
             };
             foreach (var subElement in dto.Elements)
             {
-                ConvertDTOToElement(subElement, result);
+                var element = ConvertDTOToElement(subElement, result);
+                result.Elements.Add(element);
             }
             return result;
         }

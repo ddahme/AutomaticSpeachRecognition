@@ -7,10 +7,9 @@ using Main.Model;
 
 namespace Main.Control.AddStrategy
 {
-    class P54 : AddStrategyInterface
+    class P5 : AddStrategyInterface
     {
         private Tree _lernTree;
-        private int depth;
         private List<Element> _addedElements;
         public List<Element> AddedElements
         {
@@ -20,7 +19,7 @@ namespace Main.Control.AddStrategy
             }
         }
 
-        public P54(Tree lernTree, int depth)
+        public P5(Tree lernTree)
         {
             _lernTree = lernTree;
         }
@@ -39,33 +38,23 @@ namespace Main.Control.AddStrategy
             var key = KeyController.GetKeyByName(elementIdent);
             foreach (var letter in key.Letters)
             {
+                var elementInLearnTree = _lernTree.Elements.FirstOrDefault(e => e.Ident == letter);
+                if(parent == null || parent.Weight==null || _lernTree == null || _lernTree.Weight == null || elementInLearnTree == null)
+                {
+                    throw new NullReferenceException("parent or lern-tree is null");
+                }
+
+                var weight = elementInLearnTree.Weight / _lernTree.Weight * parent.Weight;                
                 var element = new Element()
                 {
                     Elements = new List<Element>(),
                     IsRoot = false,
                     Parent = parent,
                     Ident = letter,
-                    Weight = CalculateWeight(parent)
+                    Weight = weight
                 };
                 _addedElements.Add(element);
                 parent.Elements.Add(element);
-            }
-        }
-
-        private double CalculateWeight(Element parent)
-        {
-            var result = 0.0;
-            var parentInLerntree = _lernTree.
-            return result;
-        }
-
-        private Element GetElementInLerntreeByIdentInDepth(char ident, int depth)
-        {
-            Element parent;
-            parent.Elements.Where(e1 => e1.Elements)
-            for(int i = 0; i < depth-1; i++)
-            {
-                parent = parent.
             }
         }
     }
