@@ -44,7 +44,7 @@ namespace Main.Control.AddStrategy
                     throw new NullReferenceException("parent or lern-tree is null");
                 }
 
-                var weight = elementInLearnTree.Weight / _lernTree.Weight * parent.Weight;                
+                var weight = -(Math.Log(elementInLearnTree.Weight / _lernTree.Weight) + parent.Weight);                
                 var element = new Element()
                 {
                     Elements = new List<Element>(),

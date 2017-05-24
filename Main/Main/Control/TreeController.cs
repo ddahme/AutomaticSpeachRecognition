@@ -274,7 +274,7 @@ namespace Main.Control
             {
                 nResults = numberOfResults.Value;
             }
-            var sortedAddedElements = _parseTreeFactory.AddedElements.OrderByDescending(e => e.Weight);
+            var sortedAddedElements = _parseTreeFactory.AddedElements.OrderBy(e => e.Weight);
             foreach(var leaf in sortedAddedElements)
             {
                 if(nResults == 0) {

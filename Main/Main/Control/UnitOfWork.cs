@@ -90,7 +90,7 @@ namespace Main.Control
                 _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
                 _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
                 //_treeController.BuildLernTree();
-                _treeController.RestoreLernTree("D:\\Studium\\10SoSe2017\\03AutomatischeSprachverarbeitung\\03Praktikum\\Praktikum3\\learnTree.xml");
+                _treeController.RestoreLernTree("D:\\Documents\\Study\\10SoSe2017\\03AutomatischeSprachverarbeitung\\03Praktikum\\Praktikum3\\learnTree.xml");
                 _treeController.ParseStrategy = typeof(AddStrategy.P5);
                 _treeController.ParseTreeDepth = 7;
             }
