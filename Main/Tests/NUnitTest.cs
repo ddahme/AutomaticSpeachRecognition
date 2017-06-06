@@ -16,17 +16,17 @@ namespace Tests
         public void SetUp()
         {
             treeController = new TreeController();
-            //add lern-strategy
-            treeController.LernStrategy = typeof(SimpleLernStrategy);
-            //Add lern-files
-            treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "adventures_of_huckleberry_finn.txt"));
-            treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
-            treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
-            treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
+            //add learn-strategy
+            treeController.learnStrategy = typeof(SimplelearnStrategy);
+            //Add learn-files
+            treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "adventures_of_huckleberry_finn.txt"));
+            treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
+            treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
+            treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
             //Add test-files
             treeController.TestFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_adevntures_of_sherlock_holmes.txt"));
-            //lern
-            treeController.BuildLernTree();
+            //learn
+            treeController.BuildlearnTree();
             //add parse Strategy
             treeController.ParseStrategy = typeof(MarcowParseStrategy);
         }

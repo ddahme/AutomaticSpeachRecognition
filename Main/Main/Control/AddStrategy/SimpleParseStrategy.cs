@@ -22,7 +22,7 @@ namespace Main.Control.AddStrategy
       }
     }
 
-    public bool IsUsingLernTree
+    public bool IsUsinglearnTree
     {
       get
       {

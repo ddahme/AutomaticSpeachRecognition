@@ -9,7 +9,7 @@ namespace Main.Control.AddStrategy
 {
     public class MarcowParseStrategy : AddStrategyInterface
     {
-        private Tree _lernTree;
+        private Tree _learnTree;
         private List<Element> _addedElements;
         public List<Element> AddedElements
         {
@@ -19,7 +19,7 @@ namespace Main.Control.AddStrategy
             }
         }
 
-        public bool IsUsingLernTree
+        public bool IsUsinglearnTree
         {
             get
             {
@@ -27,25 +27,25 @@ namespace Main.Control.AddStrategy
             }
         }
 
-        public MarcowParseStrategy(Tree lernTree)
+        public MarcowParseStrategy(Tree learnTree)
         {
-            _lernTree = lernTree;
+            _learnTree = learnTree;
         }
 
         public void Add(Element parent, char elementIdent)
         {
             _addedElements = new List<Element>();
-            //var lernElements = _lernTree.Elements.SelectMany(e => e.Elements);
+            //var learnElements = _learnTree.Elements.SelectMany(e => e.Elements);
             var possibleLetters = KeyController.GetKeyByName(elementIdent).Letters;
-            var parentInLernTree = _lernTree.Elements.Where(e => e.Ident == parent.Ident).FirstOrDefault();
+            var parentInlearnTree = _learnTree.Elements.Where(e => e.Ident == parent.Ident).FirstOrDefault();
             foreach (var letter in possibleLetters)
             {
-                var elementInLernTree = parentInLernTree.Elements.Where(e => e.Ident == letter).FirstOrDefault();
-                //ToDo thinlk about elements which are not in the lerntree
+                var elementInlearnTree = parentInlearnTree.Elements.Where(e => e.Ident == letter).FirstOrDefault();
+                //ToDo thinlk about elements which are not in the learntree
                 var probability = 0.0;
-                if (elementInLernTree != null && parentInLernTree != null)
+                if (elementInlearnTree != null && parentInlearnTree != null)
                 {
-                    probability = elementInLernTree.Weight / parentInLernTree.Weight;
+                    probability = elementInlearnTree.Weight / parentInlearnTree.Weight;
                 }
                 var element = new Element()
                 {

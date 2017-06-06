@@ -7,7 +7,7 @@ using Main.Model;
 
 namespace Main.Control.AddStrategy
 {
-  public class SimpleLernStrategy : AddStrategyInterface
+  public class SimplelearnStrategy : AddStrategyInterface
   {
     private List<Element> _addedElements;
     public List<Element> AddedElements
@@ -18,7 +18,7 @@ namespace Main.Control.AddStrategy
       }
     }
 
-    public bool IsUsingLernTree
+    public bool IsUsinglearnTree
     {
       get
       {
@@ -63,7 +63,7 @@ namespace Main.Control.AddStrategy
     }
         public override string ToString()
         {
-            return "SimpleLernStrategy";
+            return "SimplelearnStrategy";
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Main.Control
 {
     class UnitOfWork
     {
-        private enum _states { Init, IsInMainMenu, IsInLernMenu, FinishedLoadLernTree, StartSaveLernTree, FinishedSaveLernTree, ReadKeyFromKeyboard, ReadKeyFromFile, ConvertLetterToKey, AddKeyToParseTree, ChangeParseTree, StartLoadLernTree, BuildLernTree, SaveLernTree, TestLernTree, PrintTree, Error, IsInUtilMenu, IsInConfigMenu, IsInParseMenu, StartBuildLernTree, FinischedBuildLernTree, StartTestLernTree, FinishedTestLernTree, StartParseKey, FinishedParseKey, StartParseFile, FinishedParseFile, StartProbabilityOfLetter, FinishedProbabilityOfLetter, StartProbabilityOfText, FinishedProbabilityOfText, StartGetBestResults, FinishedGetBestResults, StartSetStrategy, FinishedSetStrategy, StartSetDepth, FinishedSetDepth, StartConvertMenu, FinishedConvertMenu, FinishedConvertLetterFileToKeyFile, StartConvertLetterFileToKeyFile, IsInDrawMenu };
+        private enum _states { Init, IsInMainMenu, IsInlearnMenu, FinishedLoadlearnTree, StartSavelearnTree, FinishedSavelearnTree, ReadKeyFromKeyboard, ReadKeyFromFile, ConvertLetterToKey, AddKeyToParseTree, ChangeParseTree, StartLoadlearnTree, BuildlearnTree, SavelearnTree, TestlearnTree, PrintTree, Error, IsInUtilMenu, IsInConfigMenu, IsInParseMenu, StartBuildlearnTree, FinischedBuildlearnTree, StartTestlearnTree, FinishedTestlearnTree, StartParseKey, FinishedParseKey, StartParseFile, FinishedParseFile, StartProbabilityOfLetter, FinishedProbabilityOfLetter, StartProbabilityOfText, FinishedProbabilityOfText, StartGetBestResults, FinishedGetBestResults, StartSetStrategy, FinishedSetStrategy, StartSetDepth, FinishedSetDepth, StartConvertMenu, FinishedConvertMenu, FinishedConvertLetterFileToKeyFile, StartConvertLetterFileToKeyFile, IsInDrawMenu };
         private List<_states> _lastStates;
         private _states _state
         {
@@ -57,7 +57,7 @@ namespace Main.Control
                 switch (input.Key)
                 {
                     case (ConsoleKey.L):
-                        LernMenu();
+                        learnMenu();
                         break;
                     case (ConsoleKey.P):
                         ParseMenu();
@@ -83,14 +83,14 @@ namespace Main.Control
             Console.WriteLine("set default values");
             try
             {
-                _treeController.LernStrategy = typeof(AddStrategy.SimpleLernStrategy);
-                _treeController.LernTreeDepth = 7;
-                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "adventures_of_huckleberry_finn.txt"));
-                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
-                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
-                _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
-                //_treeController.BuildLernTree();
-                _treeController.RestoreLernTree("D:\\Documents\\Study\\10SoSe2017\\03AutomatischeSprachverarbeitung\\03Praktikum\\Praktikum3\\learnTree.xml");
+                _treeController.learnStrategy = typeof(AddStrategy.SimplelearnStrategy);
+                _treeController.learnTreeDepth = 7;
+                _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "adventures_of_huckleberry_finn.txt"));
+                _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
+                _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
+                _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
+                //_treeController.BuildlearnTree();
+                _treeController.RestorelearnTree("D:\\Studium\\10SoSe2017\\03AutomatischeSprachverarbeitung\\03Praktikum\\Praktikum4\\learnTree.xml");
                 _treeController.ParseStrategy = typeof(AddStrategy.P5);
                 _treeController.ParseTreeDepth = 7;
             }
@@ -100,13 +100,13 @@ namespace Main.Control
             }
         }
 
-        private void LernMenu()
+        private void learnMenu()
         {
             bool isBreaking = false;
-            _state = _states.IsInLernMenu;
+            _state = _states.IsInlearnMenu;
             while (!isBreaking)
             {
-                Console.WriteLine("<<<<Lern-menu>>>>");
+                Console.WriteLine("<<<<learn-menu>>>>");
                 Console.WriteLine("Please select:");
                 Console.WriteLine("[L]oad tree");
                 Console.WriteLine("[S]ave tree");
@@ -118,16 +118,16 @@ namespace Main.Control
                 switch (input.Key)
                 {
                     case (ConsoleKey.L):
-                        LoadLernTreeMenu();
+                        LoadlearnTreeMenu();
                         break;
                     case (ConsoleKey.S):
-                        SaveLernTreeMenu();
+                        SavelearnTreeMenu();
                         break;
                     case (ConsoleKey.B):
-                        BuildLernTreeMenu();
+                        BuildlearnTreeMenu();
                         break;
                     case (ConsoleKey.T):
-                        TestLernTreeMenu();
+                        TestlearnTreeMenu();
                         break;
                     case (ConsoleKey.Escape):
                         isBreaking = true;
@@ -139,44 +139,44 @@ namespace Main.Control
             }
         }
 
-        private void LoadLernTreeMenu()
+        private void LoadlearnTreeMenu()
         {
-            _state = _states.StartLoadLernTree;
+            _state = _states.StartLoadlearnTree;
             Console.WriteLine("Please enter path to tree to restore.");
             var path = Console.ReadLine();
             try
             {
-                _treeController.RestoreLernTree(path);
+                _treeController.RestorelearnTree(path);
             }
             catch (Exception exception)
             {
                 Error(exception);
             }
-            _state = _states.FinishedLoadLernTree;
-            LernMenu();
+            _state = _states.FinishedLoadlearnTree;
+            learnMenu();
         }
 
-        private void SaveLernTreeMenu()
+        private void SavelearnTreeMenu()
         {
-            _state = _states.StartSaveLernTree;
+            _state = _states.StartSavelearnTree;
             Console.WriteLine("Please enter path to save tree");
             var path = Console.ReadLine();
             try
             {
-                _treeController.SaveLernTree(path);
+                _treeController.SavelearnTree(path);
             }
             catch (Exception exception)
             {
                 Error(exception);
             }
-            _state = _states.FinishedSaveLernTree;
-            LernMenu();
+            _state = _states.FinishedSavelearnTree;
+            learnMenu();
         }
 
-        private void BuildLernTreeMenu()
+        private void BuildlearnTreeMenu()
         {
-            _state = _states.StartBuildLernTree;
-            Console.WriteLine("Please select files to build lern-tree");
+            _state = _states.StartBuildlearnTree;
+            Console.WriteLine("Please select files to build learn-tree");
             Console.WriteLine("You can select more by seperate them with a , like A,H");
             Console.WriteLine("Adventures of [H]uckleberry Finn (606,623 letters)");
             Console.WriteLine("[A]lice adventures in Wonderland (167,515 letters)");
@@ -212,24 +212,24 @@ namespace Main.Control
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     Console.WriteLine(fileName);
-                    _treeController.LernFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", fileName));
+                    _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", fileName));
                 }
             }
             try
             {
-                _treeController.BuildLernTree();
+                _treeController.BuildlearnTree();
             }
             catch (Exception exception)
             {
                 Error(exception);
             }
-            _state = _states.FinischedBuildLernTree;
+            _state = _states.FinischedBuildlearnTree;
         }
 
-        private void TestLernTreeMenu()
+        private void TestlearnTreeMenu()
         {
-            _state = _states.StartTestLernTree;
-            Console.WriteLine("Please select files to build lern-tree");
+            _state = _states.StartTestlearnTree;
+            Console.WriteLine("Please select files to build learn-tree");
             Console.WriteLine("You can select more by seperate them with a , like A,H");
             Console.WriteLine("Adventures of [H]uckleberry Finn (606,623 letters)");
             Console.WriteLine("[A]lice adventures in Wonderland (167,515 letters)");
@@ -270,13 +270,13 @@ namespace Main.Control
             }
             try
             {
-                _treeController.TestLernTree();
+                _treeController.TestlearnTree();
             }
             catch (Exception exception)
             {
                 Error(exception);
             }
-            _state = _states.FinishedTestLernTree;
+            _state = _states.FinishedTestlearnTree;
         }
 
         private void ParseMenu()
@@ -473,7 +473,7 @@ namespace Main.Control
         private void SetStrategyMenu()
         {
             bool isFinished = false;
-            bool isLern = false;
+            bool islearn = false;
             bool isParse = false;
             _state = _states.StartSetStrategy;
             Console.WriteLine("Please select which strategy you want to set.");
@@ -493,9 +493,9 @@ namespace Main.Control
                 {
                     try
                     {
-                        if (isLern)
+                        if (islearn)
                         {
-                            _treeController.LernStrategy = _treeController.AddStrategies[index];
+                            _treeController.learnStrategy = _treeController.AddStrategies[index];
                             isFinished = true;
                         }
                         if (isParse)
@@ -514,13 +514,13 @@ namespace Main.Control
                     switch (input.Key)
                     {
                         case (ConsoleKey.L):
-                            Console.WriteLine("Lernstrategy:");
-                            isLern = true;
+                            Console.WriteLine("learnstrategy:");
+                            islearn = true;
                             isParse = false;
                             break;
                         case (ConsoleKey.P):
                             Console.WriteLine("Parsestrategy:");
-                            isLern = false;
+                            islearn = false;
                             isParse = true;
                             break;
                         case (ConsoleKey.Escape):
@@ -539,7 +539,7 @@ namespace Main.Control
         private void SetDepthMenu()
         {
             bool isFinished = false;
-            bool isLern = false;
+            bool islearn = false;
             bool isParse = false;
             _state = _states.StartSetDepth;
             Console.WriteLine("Please select which depth you want to set.");
@@ -555,9 +555,9 @@ namespace Main.Control
                 {
                     try
                     {
-                        if (isLern)
+                        if (islearn)
                         {
-                            _treeController.LernTreeDepth = depth;
+                            _treeController.learnTreeDepth = depth;
                             isFinished = true;
                         }
                         if (isParse)
@@ -575,12 +575,12 @@ namespace Main.Control
                     switch (input.Key)
                     {
                         case (ConsoleKey.L):
-                            isLern = true;
+                            islearn = true;
                             isParse = false;
-                            Console.WriteLine("Lerndepth:");
+                            Console.WriteLine("learndepth:");
                             break;
                         case (ConsoleKey.P):
-                            isLern = false;
+                            islearn = false;
                             isParse = true;
                             Console.WriteLine("Parsedepth:");
                             break;
@@ -710,7 +710,7 @@ namespace Main.Control
                 switch (input.Key)
                 {
                     case (ConsoleKey.L):
-                        var result = _treeController.ConvertLernTreeToString();
+                        var result = _treeController.ConvertlearnTreeToString();
                         Console.WriteLine(result);
                         break;
                     case (ConsoleKey.Escape):

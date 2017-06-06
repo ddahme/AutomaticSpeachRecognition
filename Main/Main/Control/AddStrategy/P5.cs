@@ -9,7 +9,8 @@ namespace Main.Control.AddStrategy
 {
     class P5 : AddStrategyInterface
     {
-        private Tree _lernTree;
+        private Tree _learnTree;
+        private int _depth;
         private List<Element> _addedElements;
         public List<Element> AddedElements
         {
@@ -19,12 +20,13 @@ namespace Main.Control.AddStrategy
             }
         }
 
-        public P5(Tree lernTree)
+        public P5(Tree learnTree, int depth)
         {
-            _lernTree = lernTree;
+            _learnTree = learnTree;
+            _depth = depth;
         }
 
-        public bool IsUsingLernTree
+        public bool IsUsinglearnTree
         {
             get
             {
@@ -35,26 +37,68 @@ namespace Main.Control.AddStrategy
         public void Add(Element parent, char elementIdent)
         {
             _addedElements = new List<Element>();
-            var key = KeyController.GetKeyByName(elementIdent);
-            foreach (var letter in key.Letters)
+            if (parent.Weight == 0)
             {
-                var elementInLearnTree = _lernTree.Elements.FirstOrDefault(e => e.Ident == letter);
-                if(parent == null || parent.Weight==null || _lernTree == null || _lernTree.Weight == null || elementInLearnTree == null)
+                RemovePath(parent);
+            }
+            else
+            {
+                var parentInLearnTree = GetParentInLearnTree(parent);
+                var key = KeyController.GetKeyByName(elementIdent);
+                foreach (var letter in key.Letters)
                 {
-                    throw new NullReferenceException("parent or lern-tree is null");
+                    var elementInLearnTree = parentInLearnTree.Elements.Where(e => e.Ident == letter).FirstOrDefault();
+                    if (parentInLearnTree != null && elementInLearnTree != null)
+                    {
+                        var weight = -(Math.Log(elementInLearnTree.Weight / parentInLearnTree.Weight) + parent.Weight);
+                        var element = new Element()
+                        {
+                            Elements = new List<Element>(),
+                            IsRoot = false,
+                            Parent = parent,
+                            Ident = letter,
+                            Weight = weight
+                        };
+                        _addedElements.Add(element);
+                        parent.Elements.Add(element);
+                    }
                 }
+            }
+        }
 
-                var weight = -(Math.Log(elementInLearnTree.Weight / _lernTree.Weight) + parent.Weight);                
-                var element = new Element()
+        private Element GetParentInLearnTree(Element parent)
+        {
+            var parseElement = parent;
+            if (parent.IsRoot)
+            {
+                return _learnTree;
+            }
+            else
+            {
+                Element learnElement = _learnTree;
+                var path = new List<Element>();
+                while (!parseElement.IsRoot && path.Count <= _depth)
                 {
-                    Elements = new List<Element>(),
-                    IsRoot = false,
-                    Parent = parent,
-                    Ident = letter,
-                    Weight = weight
-                };
-                _addedElements.Add(element);
-                parent.Elements.Add(element);
+                    path.Add(parseElement);
+                    parseElement = parseElement.Parent;
+                }
+                path.Reverse();
+                foreach (var element in path)
+                {
+                    learnElement = learnElement.Elements.Where(e => e.Ident == element.Ident).FirstOrDefault();
+                }
+                return learnElement;
+            }
+        }
+
+        private void RemovePath(Element element)
+        {
+            Element parent;
+            while (element.Elements.Count == 0)
+            {
+                parent = element.Parent;
+                parent.Elements.Remove(element);
+                element = parent;
             }
         }
     }

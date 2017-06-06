@@ -14,9 +14,9 @@ namespace Main.Control
 {
     public class TreeController
     {
-        //ToDo think about lerntree and strategy and stuff
-        //build lern-Tree with treeFactory
-        //Create AdvancedParseAddStrategy and give it lern-Tree
+        //ToDo think about learntree and strategy and stuff
+        //build learn-Tree with treeFactory
+        //Create AdvancedParseAddStrategy and give it learn-Tree
         //Create TreeFactory and give it AdvancedParseAddStrategy as parseTree
         //use parse input with parseTree
         //-> treeController is useless
@@ -30,18 +30,18 @@ namespace Main.Control
                 return _addStrategies;
             }
         }
-        private Type _lernStrategy;
-        public Type LernStrategy
+        private Type _learnStrategy;
+        public Type learnStrategy
         {
             get
             {
-                return _lernStrategy;
+                return _learnStrategy;
             }
             set
             {
                 if (_addStrategies.Contains(value))
                 {
-                    _lernStrategy = value;
+                    _learnStrategy = value;
                 }
             }
         }
@@ -60,12 +60,12 @@ namespace Main.Control
                 }
             }
         }
-        private int? _lernTreeDepth;
-        public int? LernTreeDepth
+        private int? _learnTreeDepth;
+        public int? learnTreeDepth
         {
             get
             {
-                return _lernTreeDepth;
+                return _learnTreeDepth;
             }
             set
             {
@@ -73,7 +73,7 @@ namespace Main.Control
                 {
                     throw new ArgumentException("Depth of tree must be at least 1 or null");
                 }
-                _lernTreeDepth = value;
+                _learnTreeDepth = value;
             }
         }
         private int? _parseTreeDepth;
@@ -85,16 +85,16 @@ namespace Main.Control
             }
             set
             {
-                if (!_lernTreeDepth.HasValue || value > _lernTreeDepth)
+                if (!_learnTreeDepth.HasValue || value > _learnTreeDepth)
                 {
-                    throw new ArgumentException("Depth of parse-tree must be smaller then depth of lern-tree");
+                    throw new ArgumentException("Depth of parse-tree must be smaller then depth of learn-tree");
                 }
                     _parseTreeDepth = value;
             }
         }
-        private LernTreeFactory _lernTreeFactory;
+        private learnTreeFactory _learnTreeFactory;
         private TreeFactory _parseTreeFactory;
-        private Tree _lernTree;
+        private Tree _learnTree;
         private List<string> _testFilePaths;
         public List<string> TestFilePaths
         {
@@ -114,12 +114,12 @@ namespace Main.Control
                 _testFilePaths = value;
             }
         }
-        private List<string> _lernFilePaths;
-        public List<string> LernFilePaths
+        private List<string> _learnFilePaths;
+        public List<string> learnFilePaths
         {
             get
             {
-                return _lernFilePaths;
+                return _learnFilePaths;
             }
             set
             {
@@ -127,11 +127,11 @@ namespace Main.Control
                 {
                     if (!File.Exists(path))
                     {
-                        throw new FileNotFoundException("path to lern-file is invalid");
+                        throw new FileNotFoundException("path to learn-file is invalid");
                     }
                         
                 }
-                _lernFilePaths = value;
+                _learnFilePaths = value;
             }
         }
 
@@ -139,52 +139,52 @@ namespace Main.Control
         {
             _addStrategies = new List<Type>()
             {
-                typeof(SimpleLernStrategy),
+                typeof(SimplelearnStrategy),
                 typeof(SimpleParseStrategy),
                 typeof(MarcowParseStrategy),
                 typeof(P5)
             };
-            _lernFilePaths = new List<string>();
+            _learnFilePaths = new List<string>();
             _testFilePaths = new List<string>();
         }
 
-        public void BuildLernTree()
+        public void BuildlearnTree()
         {
-            var strategy = CreateInstaceOfStategy(_lernStrategy);
-            _lernTreeFactory = new LernTreeFactory(strategy, _lernTreeDepth);
+            var strategy = CreateInstaceOfStategy(_learnStrategy);
+            _learnTreeFactory = new learnTreeFactory(strategy, _learnTreeDepth);
 
-            foreach (var filePath in _lernFilePaths)
+            foreach (var filePath in _learnFilePaths)
             {
-                _lernTreeFactory.AddFile(filePath);
+                _learnTreeFactory.AddFile(filePath);
             }
-            _lernTree = _lernTreeFactory.Tree;
+            _learnTree = _learnTreeFactory.Tree;
         }
 
-        public void SaveLernTree(string path)
+        public void SavelearnTree(string path)
         {
-            _lernTree.Name = Path.GetFileName(path);
-            SaveTree(_lernTree, path);
+            _learnTree.Name = Path.GetFileName(path);
+            SaveTree(_learnTree, path);
         }
 
-        public void RestoreLernTree(string path)
+        public void RestorelearnTree(string path)
         {
-            _lernTree = RestoreTree(path);
+            _learnTree = RestoreTree(path);
         }
 
-        public double TestLernTree()
+        public double TestlearnTree()
         {
-            if (_lernTree == null)
+            if (_learnTree == null)
             {
-                throw new NullReferenceException("Unable to test lern-tree because it is null.");
+                throw new NullReferenceException("Unable to test learn-tree because it is null.");
             }
             if (_testFilePaths == null || _testFilePaths.Count == 0)
             {
-                throw new NullReferenceException("Unable to test lern-tree because list of test-files is null or empty.");
+                throw new NullReferenceException("Unable to test learn-tree because list of test-files is null or empty.");
             }
             var strategy = CreateInstaceOfStategy(_parseStrategy);
-            if (!strategy.IsUsingLernTree)
+            if (!strategy.IsUsinglearnTree)
             {
-                throw new Exception("Unable to test lern-tree because strategy do not use it");
+                throw new Exception("Unable to test learn-tree because strategy do not use it");
             }
 
             var nWrongGuess = 0;
@@ -217,7 +217,7 @@ namespace Main.Control
             if (_parseTreeFactory == null)
             {
                 var strategy = CreateInstaceOfStategy(_parseStrategy);
-                _parseTreeFactory = new TreeFactory(strategy, _parseTreeDepth);
+                _parseTreeFactory = new TreeFactory(strategy);
             }
             _parseTreeFactory.Add(ident);
             return _parseTreeFactory.AddedElements;
@@ -226,19 +226,24 @@ namespace Main.Control
         public void ResetParseTree()
         {
             var strategy = CreateInstaceOfStategy(_parseStrategy);
-            _parseTreeFactory = new TreeFactory(strategy, _parseTreeDepth);
+            _parseTreeFactory = new TreeFactory(strategy);
         }
 
         private AddStrategyInterface CreateInstaceOfStategy(Type type)
         {
-            if(type == typeof(SimpleLernStrategy) || type == typeof(SimpleParseStrategy))
+            if(type == typeof(SimplelearnStrategy) || type == typeof(SimpleParseStrategy))
             {
                 var strategy = (AddStrategyInterface)Activator.CreateInstance(type);
                 return strategy;
             }
-            if(type == typeof(MarcowParseStrategy) || type == typeof(P5))
+            if(type == typeof(MarcowParseStrategy))
             {
-                var strategy = (AddStrategyInterface)Activator.CreateInstance(type, _lernTree);
+                var strategy = (AddStrategyInterface)Activator.CreateInstance(type, _learnTree);
+                return strategy;
+            }
+            if(type == typeof(P5))
+            {
+                var strategy = (AddStrategyInterface)Activator.CreateInstance(type, _learnTree, _parseTreeDepth);
                 return strategy;
             }
             throw new ArgumentException("Unable to create an instance of type. Strategy is not supported.");
@@ -403,14 +408,14 @@ namespace Main.Control
             };
             foreach (var subElement in dto.Elements)
             {
-                ConvertDTOToElement(subElement, result);
+                result.Elements.Add(ConvertDTOToElement(subElement, result));
             }
             return result;
         }
 
-        public string ConvertLernTreeToString()
+        public string ConvertlearnTreeToString()
         {
-            var result = TreeToString(_lernTreeFactory.Tree);
+            var result = TreeToString(_learnTreeFactory.Tree);
             return result;
         }
 

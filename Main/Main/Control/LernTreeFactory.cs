@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Main.Control
 {
-    class LernTreeFactory
+    class learnTreeFactory
     {
         private Element _addedElementInLastCall;
         public List<Element> AddedElements
@@ -43,7 +43,7 @@ namespace Main.Control
             }
         }
 
-        public LernTreeFactory(AddStrategyInterface addStrategy, int? depth = null)
+        public learnTreeFactory(AddStrategyInterface addStrategy, int? depth = null)
         {
             _addStrategy = addStrategy;
             _depth = 1;

@@ -11,7 +11,7 @@ namespace Main.Control.AddStrategy
     {
         List<Element> AddedElements { get; }
 
-        bool IsUsingLernTree { get; }
+        bool IsUsinglearnTree { get; }
 
         void Add(Element parent, char elementIdent);
     }
