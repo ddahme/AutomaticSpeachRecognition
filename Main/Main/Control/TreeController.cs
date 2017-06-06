@@ -30,36 +30,36 @@ namespace Main.Control
                 return _addStrategies;
             }
         }
-        private Type _learnStrategy;
-        public Type learnStrategy
-        {
-            get
-            {
-                return _learnStrategy;
-            }
-            set
-            {
-                if (_addStrategies.Contains(value))
-                {
-                    _learnStrategy = value;
-                }
-            }
-        }
-        private Type _parseStrategy;
-        public Type ParseStrategy
-        {
-            get
-            {
-                return _parseStrategy;
-            }
-            set
-            {
-                if (_addStrategies.Contains(value))
-                {
-                    _parseStrategy = value;
-                }
-            }
-        }
+        //private Type _learnStrategy;
+        //public Type learnStrategy
+        //{
+        //    get
+        //    {
+        //        return _learnStrategy;
+        //    }
+        //    set
+        //    {
+        //        if (_addStrategies.Contains(value))
+        //        {
+        //            _learnStrategy = value;
+        //        }
+        //    }
+        //}
+        //private Type _parseStrategy;
+        //public Type ParseStrategy
+        //{
+        //    get
+        //    {
+        //        return _parseStrategy;
+        //    }
+        //    set
+        //    {
+        //        if (_addStrategies.Contains(value))
+        //        {
+        //            _parseStrategy = value;
+        //        }
+        //    }
+        //}
         private int? _learnTreeDepth;
         public int? learnTreeDepth
         {
@@ -92,8 +92,8 @@ namespace Main.Control
                     _parseTreeDepth = value;
             }
         }
-        private learnTreeFactory _learnTreeFactory;
-        private TreeFactory _parseTreeFactory;
+        private LearnTreeFactory _learnTreeFactory;
+        private ParseTreeFactory _parseTreeFactory;
         private Tree _learnTree;
         private List<string> _testFilePaths;
         public List<string> TestFilePaths
@@ -150,8 +150,8 @@ namespace Main.Control
 
         public void BuildlearnTree()
         {
-            var strategy = CreateInstaceOfStategy(_learnStrategy);
-            _learnTreeFactory = new learnTreeFactory(strategy, _learnTreeDepth);
+            //var strategy = CreateInstaceOfStategy(_learnStrategy);
+            _learnTreeFactory = new LearnTreeFactory(_learnTreeDepth);
 
             foreach (var filePath in _learnFilePaths)
             {
@@ -181,11 +181,11 @@ namespace Main.Control
             {
                 throw new NullReferenceException("Unable to test learn-tree because list of test-files is null or empty.");
             }
-            var strategy = CreateInstaceOfStategy(_parseStrategy);
-            if (!strategy.IsUsinglearnTree)
-            {
-                throw new Exception("Unable to test learn-tree because strategy do not use it");
-            }
+            //var strategy = CreateInstaceOfStategy(_parseStrategy);
+            //if (!strategy.IsUsinglearnTree)
+            //{
+            //    throw new Exception("Unable to test learn-tree because strategy do not use it");
+            //}
 
             var nWrongGuess = 0;
             var nLetter = 0;
@@ -216,8 +216,8 @@ namespace Main.Control
         {
             if (_parseTreeFactory == null)
             {
-                var strategy = CreateInstaceOfStategy(_parseStrategy);
-                _parseTreeFactory = new TreeFactory(strategy);
+                //var strategy = CreateInstaceOfStategy(_parseStrategy);
+                _parseTreeFactory = new ParseTreeFactory(_learnTree, _parseTreeDepth);
             }
             _parseTreeFactory.Add(ident);
             return _parseTreeFactory.AddedElements;
@@ -225,8 +225,8 @@ namespace Main.Control
 
         public void ResetParseTree()
         {
-            var strategy = CreateInstaceOfStategy(_parseStrategy);
-            _parseTreeFactory = new TreeFactory(strategy);
+            //var strategy = CreateInstaceOfStategy(_parseStrategy);
+            _parseTreeFactory = new ParseTreeFactory(_learnTree, _parseTreeDepth);
         }
 
         private AddStrategyInterface CreateInstaceOfStategy(Type type)
@@ -254,8 +254,8 @@ namespace Main.Control
         {
             if (_parseTreeFactory == null)
             {
-                var strategy = CreateInstaceOfStategy(_parseStrategy);
-                _parseTreeFactory = new TreeFactory(strategy);
+                //var strategy = CreateInstaceOfStategy(_parseStrategy);
+                _parseTreeFactory = new ParseTreeFactory(_learnTree, _parseTreeDepth);
             }
             return _parseTreeFactory.AddedElements;
         }

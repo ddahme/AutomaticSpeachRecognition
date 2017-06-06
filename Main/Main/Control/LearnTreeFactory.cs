@@ -9,9 +9,10 @@ using System.IO;
 
 namespace Main.Control
 {
-    class learnTreeFactory
+    class LearnTreeFactory
     {
         private Element _addedElementInLastCall;
+        private Element _addedElementInCurrentCall;
         public List<Element> AddedElements
         {
             get
@@ -22,7 +23,7 @@ namespace Main.Control
                 };
             }
         }
-        private AddStrategyInterface _addStrategy;
+        //private AddStrategyInterface _addStrategy;
         private int _level;
 
         private Tree _tree;
@@ -43,9 +44,9 @@ namespace Main.Control
             }
         }
 
-        public learnTreeFactory(AddStrategyInterface addStrategy, int? depth = null)
+        public LearnTreeFactory(int? depth = null)
         {
-            _addStrategy = addStrategy;
+            //_addStrategy = addStrategy;
             _depth = 1;
             if (depth.HasValue)
             {
@@ -88,25 +89,50 @@ namespace Main.Control
 
         public void Add(char ident)
         {
-            var addedElementInCurrentCall = new Element();
-
-            //call the add-strategy
-            _addStrategy.Add(_addedElementInLastCall, ident);
-            //add add the result to the list of added elementrs for the next level
-            addedElementInCurrentCall = _addStrategy.AddedElements.FirstOrDefault();
-
-            //increment level
-            _level++;
             //if the trees depth is restricted by _depth, check if this level is to deep
-            if (_depth > 0 && ((_level) % _depth) == 0)
+            if (_depth > 0 && (_level % _depth) == 0)
             {
-                //if it is use the root as last level
                 _addedElementInLastCall = _tree;
             }
             else
             {
-                //if it is not just use the added elements of this iteratrion for the next one and go ahead
-                _addedElementInLastCall = addedElementInCurrentCall;
+                _addedElementInLastCall = _addedElementInCurrentCall;
+            }
+            Add(_addedElementInLastCall, ident);
+            _level++;
+        }
+
+        private void Add(Element parent, char elementIdent)
+        {
+            Element node;
+
+            //check if element allready exists
+            node = parent.Elements.Find(e => e.Ident == elementIdent);
+            if (node == null)
+            {
+                //create new element
+                node = new Element()
+                {
+                    Ident = elementIdent,
+                    Parent = parent,
+                    IsRoot = false,
+                    Elements = new List<Element>(),
+                    Weight = 0
+                };
+                //add it to parent
+                parent.Elements.Add(node);
+            }
+            //increase weight of path
+            IncreseWeightRecursiv(node);
+            _addedElementInCurrentCall = node;
+        }
+
+        private void IncreseWeightRecursiv(Element composite)
+        {
+            composite.Weight++;
+            if (!composite.IsRoot)
+            {
+                IncreseWeightRecursiv(composite.Parent);
             }
         }
     }

@@ -83,16 +83,16 @@ namespace Main.Control
             Console.WriteLine("set default values");
             try
             {
-                _treeController.learnStrategy = typeof(AddStrategy.SimplelearnStrategy);
-                _treeController.learnTreeDepth = 7;
+                //_treeController.learnStrategy = typeof(AddStrategy.SimplelearnStrategy);
+                //_treeController.learnTreeDepth = 7;
                 _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "adventures_of_huckleberry_finn.txt"));
                 _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "alices_adventures_in_wonderland.txt"));
                 _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "pride_and_prejudice.txt"));
                 _treeController.learnFilePaths.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "the_jungle_book.txt"));
                 //_treeController.BuildlearnTree();
                 _treeController.RestorelearnTree("D:\\Studium\\10SoSe2017\\03AutomatischeSprachverarbeitung\\03Praktikum\\Praktikum4\\learnTree.xml");
-                _treeController.ParseStrategy = typeof(AddStrategy.P5);
-                _treeController.ParseTreeDepth = 7;
+                //_treeController.ParseStrategy = typeof(AddStrategy.P5);
+                //_treeController.ParseTreeDepth = 7;
             }
             catch (Exception exception)
             {
@@ -495,12 +495,12 @@ namespace Main.Control
                     {
                         if (islearn)
                         {
-                            _treeController.learnStrategy = _treeController.AddStrategies[index];
+                            //_treeController.learnStrategy = _treeController.AddStrategies[index];
                             isFinished = true;
                         }
                         if (isParse)
                         {
-                            _treeController.ParseStrategy = _treeController.AddStrategies[index];
+                            //_treeController.ParseStrategy = _treeController.AddStrategies[index];
                             isFinished = true;
                         }
                     }

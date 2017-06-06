@@ -53,7 +53,8 @@
     <Compile Include="Control\AddStrategy\SimpleLernStrategy.cs" />
     <Compile Include="Control\AddStrategy\SimpleParseStrategy.cs" />
     <Compile Include="Control\KeyController.cs" />
-    <Compile Include="Control\LernTreeFactory.cs" />
+    <Compile Include="Control\ParseTreeFactory.cs" />
+    <Compile Include="Control\LearnTreeFactory.cs" />
     <Compile Include="Control\TreeController.cs" />
     <Compile Include="Control\TreeFactory.cs" />
     <Compile Include="Control\UnitOfWork.cs" />
