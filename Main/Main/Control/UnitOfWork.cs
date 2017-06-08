@@ -35,7 +35,7 @@ namespace Main.Control
             _lastStates = new List<_states>();
             _state = _states.Init;
             _treeController = new TreeController();
-            SetDefaultValues();
+            //SetDefaultValues();
             MainMenu();
         }
 

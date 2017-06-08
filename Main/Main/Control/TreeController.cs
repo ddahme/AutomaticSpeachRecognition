@@ -76,7 +76,7 @@ namespace Main.Control
                 _learnTreeDepth = value;
             }
         }
-        private int? _parseTreeDepth;
+        private int? _parseTreeDepth = 3;
         public int? ParseTreeDepth
         {
             get
@@ -302,6 +302,29 @@ namespace Main.Control
                 result.Add(subResult);
             }
 
+            return result;
+        }
+
+        private double CalculateProbabilityOfText(string text, int depth)
+        {
+            var result = 0.0;
+            var element = (Element)_learnTree;
+            var pathCounts = new List<double>();
+            pathCounts.Add(_learnTree.Weight);
+            if (_learnTree == null)
+            {
+                throw new ArgumentNullException("learn-tree is null.");
+            }
+            //get path in tree
+            for(int n = 0; n<text.Length; n++)
+            {
+                var letter = text[n];
+                element = element.Elements.Where(e => e.Ident == letter).FirstOrDefault();
+                for(int k = n<depth?n:depth; k > 0; k--)//ToDo: check this
+                {
+                    //ToDo caculate probability
+                }
+            }
             return result;
         }
 

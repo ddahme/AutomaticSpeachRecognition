@@ -117,7 +117,7 @@ namespace Main.Control
                 var elementInLearnTree = parentInLearnTree.Elements.Where(e => e.Ident == letter).FirstOrDefault();
                 if (parentInLearnTree != null && elementInLearnTree != null)
                 {
-                    var weight = -(Math.Log(elementInLearnTree.Weight / parentInLearnTree.Weight) + parent.Weight);
+                    var weight = -(Math.Log(elementInLearnTree.Weight / parentInLearnTree.Weight)) + parent.Weight;
                     var element = new Element()
                     {
                         Elements = new List<Element>(),
@@ -156,6 +156,8 @@ namespace Main.Control
                 return learnElement;
             }
         }
+
+        //private double CalculateProba
 
         private void RemovePath(Element element)
         {
