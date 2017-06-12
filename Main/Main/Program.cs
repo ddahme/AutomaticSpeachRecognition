@@ -1,4 +1,5 @@
 ﻿using Main.Control;
+using Main.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Main
     {
         static void Main(string[] args)
         {
-            UnitOfWork.DoWork(args);
+            //Menu.DoWork(args);
+            SimpleMenu.DoWork();
         }
     }
 }

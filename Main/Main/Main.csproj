@@ -52,12 +52,13 @@
     <Compile Include="Control\AddStrategy\P5.cs" />
     <Compile Include="Control\AddStrategy\SimpleLernStrategy.cs" />
     <Compile Include="Control\AddStrategy\SimpleParseStrategy.cs" />
+    <Compile Include="Control\FileController.cs" />
     <Compile Include="Control\KeyController.cs" />
     <Compile Include="Control\ParseTreeFactory.cs" />
     <Compile Include="Control\LearnTreeFactory.cs" />
     <Compile Include="Control\TreeController.cs" />
     <Compile Include="Control\TreeFactory.cs" />
-    <Compile Include="Control\UnitOfWork.cs" />
+    <Compile Include="View\Menu.cs" />
     <Compile Include="Model\DTO\ElementDTO.cs" />
     <Compile Include="Model\DTO\TreeDTO.cs" />
     <Compile Include="Model\Element.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Model\Tree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\SimpleMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

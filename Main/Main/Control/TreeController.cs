@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -163,12 +162,13 @@ namespace Main.Control
         public void SavelearnTree(string path)
         {
             _learnTree.Name = Path.GetFileName(path);
-            SaveTree(_learnTree, path);
+            FileController.SaveTree(_learnTree, path);
         }
 
         public void RestorelearnTree(string path)
         {
-            _learnTree = RestoreTree(path);
+            _learnTree = FileController.RestoreTree(path);
+            _learnTreeDepth = _learnTree.Depth;
         }
 
         public double TestlearnTree()
@@ -305,137 +305,45 @@ namespace Main.Control
             return result;
         }
 
-        private double CalculateProbabilityOfText(string text, int depth)
+        public double CalculateProbabilityOfText(string text, int depth)
         {
             var result = 0.0;
             var element = (Element)_learnTree;
-            var pathCounts = new List<double>();
-            pathCounts.Add(_learnTree.Weight);
+            var parent = (Element)_learnTree;
             if (_learnTree == null)
             {
                 throw new ArgumentNullException("learn-tree is null.");
             }
+            if(depth > _learnTreeDepth)
+            {
+                throw new ArgumentException("depth is bigger than lern-tree depth");
+            }
             //get path in tree
-            for(int n = 0; n<text.Length; n++)
+            for (int n = 0; n < text.Length; n++)
             {
-                var letter = text[n];
-                element = element.Elements.Where(e => e.Ident == letter).FirstOrDefault();
-                for(int k = n<depth?n:depth; k > 0; k--)//ToDo: check this
+                for (int k = n == 0?0:n<depth?n:depth ; k > 0; k--)//ToDo: check this
                 {
-                    //ToDo caculate probability
+                    var letter = text[n - k];
+                    parent = _learnTree;
+                    if (parent != null)
+                    {
+                        parent = parent.Elements.Where(e => e.Ident == letter).FirstOrDefault();
+                    }
+                }
+
+                if (parent != null)
+                {
+                    var letter = text[n];
+                    element = parent.Elements.Where(e => e.Ident == letter).FirstOrDefault();
+                    if (element != null)
+                    {
+                    result += -(Math.Log(element.Weight/parent.Weight));
                 }
             }
-            return result;
-        }
-
-        private Tree RestoreTree(string path)
-        {
-            var document = new XmlDocument();
-            TreeDTO result;
-            document.Load(path);
-            var content = document.OuterXml;
-            using (var reader = new StringReader(content))
-            {
-                var serializer = new XmlSerializer(typeof(TreeDTO));
-                using (var innerReader = new XmlTextReader(reader))
-                {
-                    result = (TreeDTO)serializer.Deserialize(innerReader);
-                    innerReader.Close();
-                }
-                reader.Close();
-            }
-            return ConvertDTOToTree(result);
-        }
-
-        private void SaveTree(Tree tree, string path)
-        {
-            if (tree == null)
-            {
-                throw new NullReferenceException("Unable to save tree because it is null.");
-            }
-            var dto = CovertTreeToDTO(tree);
-            var document = new XmlDocument();
-            var serializer = new XmlSerializer(dto.GetType());
-            using (var stream = new MemoryStream())
-            {
-                serializer.Serialize(stream, dto);
-                stream.Position = 0;
-                document.Load(stream);
-                document.Save(path);
-                stream.Close();
-            }
-        }
-
-        private TreeDTO CovertTreeToDTO(Tree tree)
-        {
-            var result = new TreeDTO
-            {
-                Depth = tree.Depth,
-                Ident = tree.Ident,
-                Name = tree.Name,
-                Weigth = tree.Weight,
-                Elements = new List<ElementDTO>()
-            };
-            foreach (var subElements in tree.Elements)
-            {
-                var elementDTO = ConvertElementToDTO(subElements);
-                result.Elements.Add(elementDTO);
             }
             return result;
         }
-
-        private Tree ConvertDTOToTree(TreeDTO dto)
-        {
-            var result = new Tree
-            {
-                Name = dto.Name,
-                Ident = dto.Ident,
-                IsRoot = true,
-                Weight = dto.Weigth,
-                Depth = dto.Depth,
-                Elements = new List<Element>()
-            };
-            foreach (var subElement in dto.Elements)
-            {
-                var element = ConvertDTOToElement(subElement, result);
-                result.Elements.Add(element);
-            }
-            return result;
-        }
-
-        private ElementDTO ConvertElementToDTO(Element element)
-        {
-            var result = new ElementDTO
-            {
-                Ident = element.Ident,
-                Weigth = element.Weight,
-                Elements = new List<ElementDTO>()
-            };
-            foreach (var subElements in element.Elements)
-            {
-                var elementDTO = ConvertElementToDTO(subElements);
-                result.Elements.Add(elementDTO);
-            }
-            return result;
-        }
-
-        private Element ConvertDTOToElement(ElementDTO dto, Element parent)
-        {
-            var result = new Element
-            {
-                Ident = dto.Ident,
-                IsRoot = false,
-                Weight = dto.Weigth,
-                Parent = parent,
-                Elements = new List<Element>()
-            };
-            foreach (var subElement in dto.Elements)
-            {
-                result.Elements.Add(ConvertDTOToElement(subElement, result));
-            }
-            return result;
-        }
-
+        
         public string ConvertlearnTreeToString()
         {
             var result = TreeToString(_learnTreeFactory.Tree);
@@ -448,7 +356,7 @@ namespace Main.Control
             return result;
         }
 
-        private string TreeToString(Tree tree)
+        public static string TreeToString(Tree tree)
         {
             var hasNextLevel = true;
             var result = new StringBuilder();
@@ -470,5 +378,10 @@ namespace Main.Control
             }
             return result.ToString();
         }
+
+        //public static List<string> PathsOfTreeToString(Tree tree) {
+        //    var result = new List<string>();
+
+        //}
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Main.Control
 {
-    class UnitOfWork
+    class Menu
     {
         private enum _states { Init, IsInMainMenu, IsInlearnMenu, FinishedLoadlearnTree, StartSavelearnTree, FinishedSavelearnTree, ReadKeyFromKeyboard, ReadKeyFromFile, ConvertLetterToKey, AddKeyToParseTree, ChangeParseTree, StartLoadlearnTree, BuildlearnTree, SavelearnTree, TestlearnTree, PrintTree, Error, IsInUtilMenu, IsInConfigMenu, IsInParseMenu, StartBuildlearnTree, FinischedBuildlearnTree, StartTestlearnTree, FinishedTestlearnTree, StartParseKey, FinishedParseKey, StartParseFile, FinishedParseFile, StartProbabilityOfLetter, FinishedProbabilityOfLetter, StartProbabilityOfText, FinishedProbabilityOfText, StartGetBestResults, FinishedGetBestResults, StartSetStrategy, FinishedSetStrategy, StartSetDepth, FinishedSetDepth, StartConvertMenu, FinishedConvertMenu, FinishedConvertLetterFileToKeyFile, StartConvertLetterFileToKeyFile, IsInDrawMenu };
         private List<_states> _lastStates;
@@ -27,10 +27,10 @@ namespace Main.Control
 
         public static void DoWork(string[] args)
         {
-            var worker = new UnitOfWork();
+            var worker = new Menu();
         }
 
-        private UnitOfWork()
+        private Menu()
         {
             _lastStates = new List<_states>();
             _state = _states.Init;
