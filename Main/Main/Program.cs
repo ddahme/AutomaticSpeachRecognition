@@ -13,7 +13,8 @@ namespace Main
         static void Main(string[] args)
         {
             //Menu.DoWork(args);
-            SimpleMenu.DoWork();
+            //SimpleMenu.DoWork();
+            SimpleParseMenu.DoWork();
         }
     }
 }

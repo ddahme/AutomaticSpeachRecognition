@@ -17,9 +17,9 @@ namespace Main.View
         public static void DoWork()
         {
             var text = string.Empty;
-            var stringBuilder = new StringBuilder();
             Console.WriteLine("Enter Letter");
             var menu = new SimpleMenu();
+            var tree = menu._treeController.LearnTree;
             while (true)
             {
                 var key = Console.ReadKey().KeyChar;
@@ -27,7 +27,7 @@ namespace Main.View
                 if (KeyController.IsValideLetter(key))
                 {
                     text  += key;
-                    var probablity = menu._treeController.CalculateProbabilityOfText(text, menu._depth);
+                    var probablity = TreeController.CalculateProbabilityOfText(text, menu._depth, tree);
                     Console.WriteLine("{0}: {1}", text, probablity);
                 }
                 else
@@ -40,8 +40,7 @@ namespace Main.View
         private SimpleMenu()
         {
             _treeController = new TreeController();
-            //var path = Path.Combine(Path.GetFullPath(@"..\..\"), _treePath);
-            _treeController.RestorelearnTree(_treePath);
+            _treeController.RestoreLearnTree(_treePath);
 
         }
     }
